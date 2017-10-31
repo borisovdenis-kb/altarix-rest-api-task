@@ -1,13 +1,16 @@
 package ru.intodayer.altarixrestapitask.models;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 
 @Entity
 @Table(name = "employee")
+@EntityListeners(AuditingEntityListener.class)
 public class Employee implements Serializable {
 
     private static final long serialVersionUID = 407876557457964591L;
@@ -40,10 +43,10 @@ public class Employee implements Serializable {
 
     @Column(name = "employment_date", nullable = false, updatable = false)
     @CreatedDate
-    private LocalDate employmentDate;
+    private Date employmentDate;
 
     @Column(name = "dismissal_date", updatable = false)
-    private LocalDate dismissalDate;
+    private Date dismissalDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "position_id")
@@ -125,19 +128,19 @@ public class Employee implements Serializable {
         this.email = email;
     }
 
-    public LocalDate getEmploymentDate() {
+    public Date getEmploymentDate() {
         return employmentDate;
     }
 
-    public void setEmploymentDate(LocalDate employmentDate) {
+    public void setEmploymentDate(Date employmentDate) {
         this.employmentDate = employmentDate;
     }
 
-    public LocalDate getDismissalDate() {
+    public Date getDismissalDate() {
         return dismissalDate;
     }
 
-    public void setDismissalDate(LocalDate dismissalDate) {
+    public void setDismissalDate(Date dismissalDate) {
         this.dismissalDate = dismissalDate;
     }
 

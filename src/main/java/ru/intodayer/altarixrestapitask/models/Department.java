@@ -1,15 +1,16 @@
 package ru.intodayer.altarixrestapitask.models;
 
 import org.springframework.data.annotation.CreatedDate;
-
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 
 @Entity
 @Table(name = "department")
+@EntityListeners(AuditingEntityListener.class)
 public class Department implements Serializable {
 
     private static final long serialVersionUID = 5203441378638064229L;
@@ -24,7 +25,7 @@ public class Department implements Serializable {
 
     @Column(name = "create_date", nullable = false, updatable = false)
     @CreatedDate
-    private LocalDate createDate;
+    private Date createDate;
 
     @OneToMany(mappedBy = "parentDepartment", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Department> childDepartments;
@@ -38,7 +39,7 @@ public class Department implements Serializable {
 
     protected Department() {}
 
-    public Department(String name, LocalDate createDate, Department parentDepartment) {
+    public Department(String name, Date createDate, Department parentDepartment) {
         this.name = name;
         this.createDate = createDate;
         this.parentDepartment = parentDepartment;
@@ -60,11 +61,11 @@ public class Department implements Serializable {
         this.name = name;
     }
 
-    public LocalDate getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDate createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
