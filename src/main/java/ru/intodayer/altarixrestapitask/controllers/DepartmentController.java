@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
+import java.util.List;
 
 
 @RestController
@@ -28,4 +29,8 @@ public class DepartmentController {
         departmentService.deleteDepartment(id);
     }
 
+    @RequestMapping(path = "/departments/{id}/subdepartments")
+    public List<Department> getSubDepartments(@PathVariable long id, @RequestParam int level) {
+        return departmentService.getSubDepartments(id, level);
+    }
 }

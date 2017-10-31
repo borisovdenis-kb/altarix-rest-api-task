@@ -1,5 +1,6 @@
 package ru.intodayer.altarixrestapitask.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
@@ -27,14 +28,17 @@ public class Department implements Serializable {
     @CreatedDate
     private Date createDate;
 
-    @OneToMany(mappedBy = "parentDepartment", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "parentDepartment", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private List<Department> childDepartments;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department parentDepartment;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Employee> employees;
 
     protected Department() {}

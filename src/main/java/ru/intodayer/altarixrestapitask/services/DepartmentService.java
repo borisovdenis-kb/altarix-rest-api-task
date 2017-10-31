@@ -1,6 +1,7 @@
 package ru.intodayer.altarixrestapitask.services;
 
 import ru.intodayer.altarixrestapitask.models.Department;
+import java.util.List;
 
 
 public interface DepartmentService {
@@ -11,4 +12,5 @@ public interface DepartmentService {
 
     void deleteDepartment(long id);
 
+    List<Department> getSubDepartments(long id, int level);
 }

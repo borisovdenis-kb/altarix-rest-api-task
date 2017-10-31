@@ -1,5 +1,7 @@
 package ru.intodayer.altarixrestapitask.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -19,8 +21,11 @@ public class Position implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Employee> employees;
+
+    public Position() {}
 
     public Position(String name) {
         this.name = name;

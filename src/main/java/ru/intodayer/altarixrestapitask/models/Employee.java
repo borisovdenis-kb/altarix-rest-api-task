@@ -4,7 +4,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -33,7 +32,7 @@ public class Employee implements Serializable {
     private Gender gender;
 
     @Column(name = "birth_day", nullable = false)
-    private LocalDate birthday;
+    private Date birthday;
 
     @Column(name = "phone", nullable = false)
     private String phone;
@@ -104,11 +103,11 @@ public class Employee implements Serializable {
         this.gender = gender;
     }
 
-    public LocalDate getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(LocalDate birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 

@@ -8,6 +8,8 @@ import ru.intodayer.altarixrestapitask.services.DepartmentService;
 import ru.intodayer.altarixrestapitask.services.exceptions.Department400Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Department404Exception;
 
+import java.util.List;
+
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -57,10 +59,26 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = getDepartmentIfExist(id);
 
         if (department.getEmployees().size() == 0) {
+            for (Department child: department.getChildDepartments()) {
+                child.setParentDepartment(null);
+            }
             departmentRepository.delete(department);
         } else {
             throw new Department400Exception(
                 "Department with at least one employee can not be deleted."
+            );
+        }
+    }
+
+    @Override
+    public List<Department> getSubDepartments(long id, int level) {
+        Department department = getDepartmentIfExist(id);
+
+        if (level == 1) {
+            return department.getChildDepartments();
+        } else {
+            throw new Department400Exception(
+                "Service is not yet able to return sub-departments to a level deeper than 1."
             );
         }
     }
