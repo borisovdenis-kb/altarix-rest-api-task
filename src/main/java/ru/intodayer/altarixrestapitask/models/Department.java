@@ -22,7 +22,7 @@ public class Department implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "create_date", nullable = false)
+    @Column(name = "create_date", nullable = false, updatable = false)
     @CreatedDate
     private LocalDate createDate;
 

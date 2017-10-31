@@ -38,11 +38,11 @@ public class Employee implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "employment_date", nullable = false)
+    @Column(name = "employment_date", nullable = false, updatable = false)
     @CreatedDate
     private LocalDate employmentDate;
 
-    @Column(name = "dismissal_date")
+    @Column(name = "dismissal_date", updatable = false)
     private LocalDate dismissalDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
