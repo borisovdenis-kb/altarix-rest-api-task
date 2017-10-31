@@ -27,14 +27,14 @@ public class Department implements Serializable {
     @CreatedDate
     private Date createDate;
 
-    @OneToMany(mappedBy = "parentDepartment", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parentDepartment", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Department> childDepartments;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department parentDepartment;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Employee> employees;
 
     protected Department() {}

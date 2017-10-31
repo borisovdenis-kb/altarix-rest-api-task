@@ -11,4 +11,5 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     Department findDepartmentByParentDepartmentIsNull();
 
     Department findDepartmentByName(String name);
+
 }

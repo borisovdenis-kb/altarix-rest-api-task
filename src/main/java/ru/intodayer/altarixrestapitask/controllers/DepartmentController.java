@@ -23,4 +23,9 @@ public class DepartmentController {
         departmentService.updateDepartmentName(id, department);
     }
 
+    @RequestMapping(path = "/departments/{id}", method = RequestMethod.DELETE)
+    public void deleteDepartment(@PathVariable long id) {
+        departmentService.deleteDepartment(id);
+    }
+
 }
