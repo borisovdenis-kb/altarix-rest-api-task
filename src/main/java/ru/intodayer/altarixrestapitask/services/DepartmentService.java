@@ -1,7 +1,7 @@
 package ru.intodayer.altarixrestapitask.services;
 
 import ru.intodayer.altarixrestapitask.models.Department;
-import java.util.List;
+import ru.intodayer.altarixrestapitask.models.Employee;
 import java.util.Set;
 
 
@@ -20,4 +20,8 @@ public interface DepartmentService {
     Department getDepartmentByName(String name);
 
     Set<Department> getParentDepartments(long id);
+
+    String getDepartmentFund(long id);
+
+    Set<Employee> getDepartmentEmployees(long id);
 }

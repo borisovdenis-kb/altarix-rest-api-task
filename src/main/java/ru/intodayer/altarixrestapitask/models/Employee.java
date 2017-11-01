@@ -53,7 +53,7 @@ public class Employee implements Serializable {
     private Position position;
 
     @Column(name = "salary", nullable = false)
-    private Integer salary;
+    private Double salary;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -153,11 +153,11 @@ public class Employee implements Serializable {
         this.position = position;
     }
 
-    public Integer getSalary() {
+    public Double getSalary() {
         return salary;
     }
 
-    public void setSalary(Integer salary) {
+    public void setSalary(Double salary) {
         this.salary = salary;
     }
 

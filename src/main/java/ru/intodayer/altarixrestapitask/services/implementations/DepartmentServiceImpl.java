@@ -5,13 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.intodayer.altarixrestapitask.models.Department;
+import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
 import ru.intodayer.altarixrestapitask.services.exceptions.Department400Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Department403Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Department404Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Department500Exception;
-
 import java.util.*;
 
 
@@ -21,7 +21,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    private Department getDepartmentIfExist(long id) {
+    private Department getEntityIfExist(long id) {
         Department department = departmentRepository.findOne(id);
         if (department == null) {
             throw new Department404Exception(
@@ -43,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public void updateDepartmentName(long id, Department department) {
-        Department targetDepartment = getDepartmentIfExist(id);
+        Department targetDepartment = getEntityIfExist(id);
         Department departmentWithName = departmentRepository.findDepartmentByName(department.getName());
 
         if (departmentWithName != null) {
@@ -65,7 +65,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     public void deleteDepartment(long id) {
-        Department department = getDepartmentIfExist(id);
+        Department department = getEntityIfExist(id);
 
         if (department.getEmployees().size() == 0) {
             for (Department child: department.getChildDepartments()) {
@@ -82,7 +82,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Set<Department> getSubDepartments(long id, int level) {
-        Department department = getDepartmentIfExist(id);
+        Department department = getEntityIfExist(id);
 
         if (level == 1) {
             return department.getChildDepartments();
@@ -95,7 +95,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public String getDepartment(long id) {
-        Department department = getDepartmentIfExist(id);
+        Department department = getEntityIfExist(id);
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> jsonConstructor = new HashMap<>();
         Map<String, Object> departmentMap = new HashMap<>();
@@ -107,11 +107,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         jsonConstructor.put("employeesAmount", department.getEmployees().size());
 
         try {
-            String json = mapper.writeValueAsString(jsonConstructor);
-            return json;
+            return mapper.writeValueAsString(jsonConstructor);
         } catch (JsonProcessingException e) {
             throw new Department500Exception(
-                "Error while converting map -> string.", e
+                "Error while converting map -> json.", e
             );
         }
     }
@@ -129,7 +128,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Set<Department> getParentDepartments(long id) {
-        Department currentDep = getDepartmentIfExist(id);
+        Department currentDep = getEntityIfExist(id);
         currentDep = currentDep.getParentDepartment();
 
         Set<Department> parentDepartments = new HashSet<>();
@@ -138,5 +137,32 @@ public class DepartmentServiceImpl implements DepartmentService {
             currentDep = currentDep.getParentDepartment();
         }
         return parentDepartments;
+    }
+
+    @Override
+    public String getDepartmentFund(long id) {
+        Department department = getEntityIfExist(id);
+        Double sum = department.getEmployees()
+            .stream()
+            .mapToDouble((e) -> e.getSalary())
+            .sum();
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> jsonConstructor = new HashMap<>();
+        jsonConstructor.put("departmentFund", sum);
+
+        try {
+            return mapper.writeValueAsString(jsonConstructor);
+        } catch (JsonProcessingException e) {
+            throw new Department500Exception(
+                "Error while converting map -> json.", e
+            );
+        }
+    }
+
+    @Override
+    public Set<Employee> getDepartmentEmployees(long id) {
+        Department department = getEntityIfExist(id);
+        return department.getEmployees();
     }
 }

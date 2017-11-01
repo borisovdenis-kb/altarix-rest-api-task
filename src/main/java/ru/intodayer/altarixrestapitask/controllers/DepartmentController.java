@@ -3,8 +3,8 @@ package ru.intodayer.altarixrestapitask.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.intodayer.altarixrestapitask.models.Department;
+import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
-import java.util.List;
 import java.util.Set;
 
 
@@ -52,5 +52,19 @@ public class DepartmentController {
     @RequestMapping(path = "/departments/{id}/parentDepartments", method = RequestMethod.GET)
     public Set<Department> getParentDepartments(@PathVariable long id) {
         return departmentService.getParentDepartments(id);
+    }
+
+    @RequestMapping(
+        path = "/departments/{id}/fund",
+        method = RequestMethod.GET,
+        produces = {"application/json"}
+    )
+    public String getDepartmentFund(@PathVariable long id) {
+        return departmentService.getDepartmentFund(id);
+    }
+
+    @RequestMapping(path = "/departments/{id}/employees", method = RequestMethod.GET)
+    public Set<Employee> getDepartmentEmployees(@PathVariable long id) {
+        return departmentService.getDepartmentEmployees(id);
     }
 }
