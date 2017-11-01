@@ -51,26 +51,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployeeFromDepartment(long depId, long empId) {
-        Employee employee = getEntityIfExist(empId);
-        Department department = departmentRepository.findOne(depId);
+        Employee employee = employeeRepository.getDismissableEmployee(depId, empId);
 
-        if (department == null) {
+        if (employee == null) {
             throw new Service404Exception(
-                "Department entity with id " + depId + " does't exist."
+                String.format(
+                    "Dismissable employee (id:%s) working " +
+                    "in department (id:%s) does not exist.", empId, depId
+                )
             );
         }
 
-        if(employee.getDismissalDate() != null) {
-            throw new Service403Exception(
-                "Employee with id " + empId + " has already been dismissed."
-            );
-        }
-
-        if (employee.getDepartment().getId() != depId) {
-            throw new Service403Exception(
-                "Employee with id " + empId + " doesn't work in department with id " + depId
-            );
-        }
         employee.setDepartment(null);
         employee.setDismissalDate(new Date());
         employeeRepository.save(employee);
