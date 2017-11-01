@@ -13,4 +13,6 @@ public interface DepartmentService {
     void deleteDepartment(long id);
 
     List<Department> getSubDepartments(long id, int level);
+
+    String getDepartment(long id);
 }

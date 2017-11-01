@@ -29,7 +29,16 @@ public class DepartmentController {
         departmentService.deleteDepartment(id);
     }
 
-    @RequestMapping(path = "/departments/{id}/subdepartments")
+    @RequestMapping(
+        path = "/departments/{id}",
+        method = RequestMethod.GET,
+        produces = {"application/json"}
+    )
+    public String getDepartment(@PathVariable long id) {
+        return departmentService.getDepartment(id);
+    }
+
+    @RequestMapping(path = "/departments/{id}/subdepartments", method = RequestMethod.GET)
     public List<Department> getSubDepartments(@PathVariable long id, @RequestParam int level) {
         return departmentService.getSubDepartments(id, level);
     }

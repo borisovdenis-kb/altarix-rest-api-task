@@ -1,5 +1,6 @@
 package ru.intodayer.altarixrestapitask.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
@@ -54,6 +55,7 @@ public class Employee implements Serializable {
     @Column(name = "salary", nullable = false)
     private Integer salary;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
