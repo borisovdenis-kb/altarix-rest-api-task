@@ -45,7 +45,7 @@ public class Employee implements Serializable {
     @CreatedDate
     private Date employmentDate;
 
-    @Column(name = "dismissal_date", updatable = false)
+    @Column(name = "dismissal_date")
     private Date dismissalDate;
 
     @ManyToOne(fetch = FetchType.EAGER)

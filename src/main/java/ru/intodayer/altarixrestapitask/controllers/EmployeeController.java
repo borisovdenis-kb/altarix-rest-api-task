@@ -25,4 +25,9 @@ public class EmployeeController {
     public Employee getEmployeesChief(@PathVariable long id) {
         return employeeService.getEmployeesChief(id);
     }
+
+    @RequestMapping(path = "/departments/{depId}/employees/{empId}", method = RequestMethod.DELETE)
+    public void deleteEmployeeFromDepartment(@PathVariable long depId, @PathVariable long empId) {
+        employeeService.deleteEmployeeFromDepartment(depId, empId);
+    }
 }

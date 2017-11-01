@@ -7,4 +7,6 @@ public interface EmployeeService {
     Employee getEmployee(long id);
 
     Employee getEmployeesChief(long id);
+
+    void deleteEmployeeFromDepartment(long depId, long empId);
 }
