@@ -8,12 +8,11 @@ import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
 import ru.intodayer.altarixrestapitask.services.exceptions.Department400Exception;
+import ru.intodayer.altarixrestapitask.services.exceptions.Department403Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Department404Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Department500Exception;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -50,7 +49,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departmentWithName != null) {
             if(departmentWithName.getId() != targetDepartment.getId()) {
                 throw new Department400Exception(
-                    "Department with that name already exist."
+                    "Department with name " + departmentWithName.getName() + " already exist."
                 );
             }
         }
@@ -59,6 +58,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentRepository.save(targetDepartment);
     }
 
+    /**
+     * It is assumed that when a department is deleted, all sub-departments
+     * are not deleted cascaded, but simply lose the reference to the parent.
+     * And then the client for each sub-department sets new parent department.
+     */
     @Override
     public void deleteDepartment(long id) {
         Department department = getDepartmentIfExist(id);
@@ -67,16 +71,17 @@ public class DepartmentServiceImpl implements DepartmentService {
             for (Department child: department.getChildDepartments()) {
                 child.setParentDepartment(null);
             }
+            department.setParentDepartment(null);
             departmentRepository.delete(department);
         } else {
-            throw new Department400Exception(
+            throw new Department403Exception(
                 "Department with at least one employee can not be deleted."
             );
         }
     }
 
     @Override
-    public List<Department> getSubDepartments(long id, int level) {
+    public Set<Department> getSubDepartments(long id, int level) {
         Department department = getDepartmentIfExist(id);
 
         if (level == 1) {
@@ -109,5 +114,29 @@ public class DepartmentServiceImpl implements DepartmentService {
                 "Error while converting map -> string.", e
             );
         }
+    }
+
+    @Override
+    public Department getDepartmentByName(String name) {
+        Department department = departmentRepository.findDepartmentByName(name);
+        if (department == null) {
+            throw new Department404Exception(
+                "Department with name " + name + " does not exist."
+            );
+        }
+        return department;
+    }
+
+    @Override
+    public Set<Department> getParentDepartments(long id) {
+        Department currentDep = getDepartmentIfExist(id);
+        currentDep = currentDep.getParentDepartment();
+
+        Set<Department> parentDepartments = new HashSet<>();
+        while (currentDep != null) {
+            parentDepartments.add(currentDep);
+            currentDep = currentDep.getParentDepartment();
+        }
+        return parentDepartments;
     }
 }

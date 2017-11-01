@@ -2,6 +2,7 @@ package ru.intodayer.altarixrestapitask.services;
 
 import ru.intodayer.altarixrestapitask.models.Department;
 import java.util.List;
+import java.util.Set;
 
 
 public interface DepartmentService {
@@ -12,7 +13,11 @@ public interface DepartmentService {
 
     void deleteDepartment(long id);
 
-    List<Department> getSubDepartments(long id, int level);
+    Set<Department> getSubDepartments(long id, int level);
 
     String getDepartment(long id);
+
+    Department getDepartmentByName(String name);
+
+    Set<Department> getParentDepartments(long id);
 }

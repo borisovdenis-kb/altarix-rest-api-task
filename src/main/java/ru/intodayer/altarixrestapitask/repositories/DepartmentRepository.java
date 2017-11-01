@@ -17,4 +17,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     @Query("select e from Employee e where e.department = :department and e.isChief = true")
     Employee getDepartmentChief(@Param("department") Department department);
+
+//    @Query("select d.parentDepartment from Department d where d.id = :id")
+//    Department getParentDepartment(@Param("id") long id);
 }

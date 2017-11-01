@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -38,8 +39,18 @@ public class DepartmentController {
         return departmentService.getDepartment(id);
     }
 
+    @RequestMapping(path = "/departments", method = RequestMethod.GET)
+    public Department getDepartmentByName(@RequestParam String name) {
+        return departmentService.getDepartmentByName(name);
+    }
+
     @RequestMapping(path = "/departments/{id}/subdepartments", method = RequestMethod.GET)
-    public List<Department> getSubDepartments(@PathVariable long id, @RequestParam int level) {
+    public Set<Department> getSubDepartments(@PathVariable long id, @RequestParam int level) {
         return departmentService.getSubDepartments(id, level);
+    }
+
+    @RequestMapping(path = "/departments/{id}/parentDepartments", method = RequestMethod.GET)
+    public Set<Department> getParentDepartments(@PathVariable long id) {
+        return departmentService.getParentDepartments(id);
     }
 }

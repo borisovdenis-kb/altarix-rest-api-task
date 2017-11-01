@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -30,16 +31,16 @@ public class Department implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "parentDepartment", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private List<Department> childDepartments;
+    private Set<Department> childDepartments;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department parentDepartment;
 
     @JsonIgnore
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Employee> employees;
+    private Set<Employee> employees;
 
     protected Department() {}
 
@@ -73,11 +74,11 @@ public class Department implements Serializable {
         this.createDate = createDate;
     }
 
-    public List<Department> getChildDepartments() {
+    public Set<Department> getChildDepartments() {
         return childDepartments;
     }
 
-    public void setChildDepartments(List<Department> childDepartments) {
+    public void setChildDepartments(Set<Department> childDepartments) {
         this.childDepartments = childDepartments;
     }
 
@@ -89,11 +90,11 @@ public class Department implements Serializable {
         this.parentDepartment = parentDepartment;
     }
 
-    public List<Employee> getEmployees() {
+    public Set<Employee> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -23,7 +24,7 @@ public class Position implements Serializable {
 
     @JsonIgnore
     @OneToMany(mappedBy = "position", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Employee> employees;
+    private Set<Employee> employees;
 
     public Position() {}
 
@@ -47,11 +48,11 @@ public class Position implements Serializable {
         this.name = name;
     }
 
-    public List<Employee> getEmployees() {
+    public Set<Employee> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(Set<Employee> employees) {
         this.employees = employees;
     }
 }
