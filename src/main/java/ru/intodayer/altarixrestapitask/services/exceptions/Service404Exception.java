@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 
-@ResponseStatus(code = HttpStatus.BAD_REQUEST)
-public class Department400Exception extends RuntimeException {
-    public Department400Exception() {
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
+public class Service404Exception extends RuntimeException {
+    public Service404Exception() {
         super();
     }
 
-    public Department400Exception(String message) {
+    public Service404Exception(String message) {
         super(message);
     }
 }

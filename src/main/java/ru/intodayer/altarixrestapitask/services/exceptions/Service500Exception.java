@@ -5,15 +5,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-public class Department500Exception extends RuntimeException {
-    public Department500Exception() {
+public class Service500Exception extends RuntimeException {
+    public Service500Exception() {
     }
 
-    public Department500Exception(String message) {
+    public Service500Exception(String message) {
         super(message);
     }
 
-    public Department500Exception(String message, Throwable cause) {
+    public Service500Exception(String message, Throwable cause) {
         super(message, cause);
     }
 }

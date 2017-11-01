@@ -8,10 +8,10 @@ import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
-import ru.intodayer.altarixrestapitask.services.exceptions.Department400Exception;
-import ru.intodayer.altarixrestapitask.services.exceptions.Department403Exception;
-import ru.intodayer.altarixrestapitask.services.exceptions.Department404Exception;
-import ru.intodayer.altarixrestapitask.services.exceptions.Department500Exception;
+import ru.intodayer.altarixrestapitask.services.exceptions.Service400Exception;
+import ru.intodayer.altarixrestapitask.services.exceptions.Service403Exception;
+import ru.intodayer.altarixrestapitask.services.exceptions.Service404Exception;
+import ru.intodayer.altarixrestapitask.services.exceptions.Service500Exception;
 import java.util.*;
 
 
@@ -24,7 +24,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private Department getEntityIfExist(long id) {
         Department department = departmentRepository.findOne(id);
         if (department == null) {
-            throw new Department404Exception(
+            throw new Service404Exception(
                 "Department entity with id " + id + " does't exist."
             );
         }
@@ -48,7 +48,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         if (departmentWithName != null) {
             if(departmentWithName.getId() != targetDepartment.getId()) {
-                throw new Department400Exception(
+                throw new Service400Exception(
                     "Department with name " + departmentWithName.getName() + " already exist."
                 );
             }
@@ -74,7 +74,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             department.setParentDepartment(null);
             departmentRepository.delete(department);
         } else {
-            throw new Department403Exception(
+            throw new Service403Exception(
                 "Department with at least one employee can not be deleted."
             );
         }
@@ -87,7 +87,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (level == 1) {
             return department.getChildDepartments();
         } else {
-            throw new Department400Exception(
+            throw new Service400Exception(
                 "Service is not yet able to return sub-departments to a level deeper than 1."
             );
         }
@@ -109,7 +109,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try {
             return mapper.writeValueAsString(jsonConstructor);
         } catch (JsonProcessingException e) {
-            throw new Department500Exception(
+            throw new Service500Exception(
                 "Error while converting map -> json.", e
             );
         }
@@ -119,7 +119,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Department getDepartmentByName(String name) {
         Department department = departmentRepository.findDepartmentByName(name);
         if (department == null) {
-            throw new Department404Exception(
+            throw new Service404Exception(
                 "Department with name " + name + " does not exist."
             );
         }
@@ -154,7 +154,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         try {
             return mapper.writeValueAsString(jsonConstructor);
         } catch (JsonProcessingException e) {
-            throw new Department500Exception(
+            throw new Service500Exception(
                 "Error while converting map -> json.", e
             );
         }
