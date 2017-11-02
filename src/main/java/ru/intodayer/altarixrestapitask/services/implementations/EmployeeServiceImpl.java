@@ -7,7 +7,6 @@ import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.repositories.EmployeeRepository;
 import ru.intodayer.altarixrestapitask.services.EmployeeService;
-import ru.intodayer.altarixrestapitask.services.exceptions.Service403Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service404Exception;
 import java.util.Date;
 
@@ -25,7 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = employeeRepository.findOne(id);
         if (employee == null) {
             throw new Service404Exception(
-                "Employee entity with id " + id + " does't exist."
+                Service404Exception.getEmployeeDoesNotExistMessage(id)
             );
         }
         return employee;
@@ -33,8 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getEmployee(long id) {
-        Employee employee = getEntityIfExist(id);
-        return employee;
+        return getEntityIfExist(id);
     }
 
     @Override
@@ -55,15 +53,33 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if (employee == null) {
             throw new Service404Exception(
-                String.format(
-                    "Dismissable employee (id:%s) working " +
-                    "in department (id:%s) does not exist.", empId, depId
-                )
+                "Dismissable " + Service404Exception.getEmpWoringInDepDoesNotExistMessage(empId, depId)
             );
         }
 
         employee.setDepartment(null);
         employee.setDismissalDate(new Date());
+        employeeRepository.save(employee);
+    }
+
+    @Override
+    public void changeEmployeesDepartment(long depId, long empId, long newDepId) {
+        Employee employee = employeeRepository.findEmployeeByIdAndDepartmentId(empId, depId);
+        Department newDepartment = departmentRepository.findOne(newDepId);
+
+        if (employee == null) {
+            throw new Service404Exception(
+                Service404Exception.getEmpWoringInDepDoesNotExistMessage(empId, depId)
+            );
+        }
+
+        if (newDepartment == null) {
+            throw new Service404Exception(
+                Service404Exception.getDepartmentDoesNotExistMessage(newDepId)
+            );
+        }
+
+        employee.setDepartment(newDepartment);
         employeeRepository.save(employee);
     }
 }

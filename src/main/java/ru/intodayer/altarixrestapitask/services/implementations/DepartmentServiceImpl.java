@@ -25,7 +25,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findOne(id);
         if (department == null) {
             throw new Service404Exception(
-                "Department entity with id " + id + " does't exist."
+                Service404Exception.getDepartmentDoesNotExistMessage(id)
             );
         }
         return department;

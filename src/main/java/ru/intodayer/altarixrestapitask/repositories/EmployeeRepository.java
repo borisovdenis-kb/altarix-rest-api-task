@@ -18,4 +18,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                 "AND emp.dismissal_date IS null",
         nativeQuery = true)
     Employee getDismissableEmployee(long departmentId, long employeeId);
+
+    Employee findEmployeeByIdAndDepartmentId(long employeeId, long departmentId);
 }

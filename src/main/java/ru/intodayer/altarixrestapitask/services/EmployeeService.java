@@ -9,4 +9,6 @@ public interface EmployeeService {
     Employee getEmployeesChief(long id);
 
     void deleteEmployeeFromDepartment(long depId, long empId);
+
+    void changeEmployeesDepartment(long depId, long empId, long newDepId);
 }
