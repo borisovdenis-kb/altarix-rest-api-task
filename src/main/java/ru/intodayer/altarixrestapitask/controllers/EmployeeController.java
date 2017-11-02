@@ -40,4 +40,12 @@ public class EmployeeController {
                                           @PathVariable long newDepId) {
         employeeService.changeEmployeesDepartment(depId, empId, newDepId);
     }
+
+    @RequestMapping(
+            path = "/departments/{depId}/employees/newdepartment/{newDepId}",
+            method = RequestMethod.PUT
+    )
+    public void changeEmployeesDepartment(@PathVariable long depId, @PathVariable long newDepId) {
+        employeeService.changeEmployeesDepartment(depId, newDepId);
+    }
 }

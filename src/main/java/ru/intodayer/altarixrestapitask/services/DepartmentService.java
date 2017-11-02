@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface DepartmentService {
 
-    void addDepartment(Department newDepartment);
+    void addDepartment(String json);
 
     void updateDepartmentName(long id, Department department);
 

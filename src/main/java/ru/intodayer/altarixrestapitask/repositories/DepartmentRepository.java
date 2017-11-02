@@ -11,7 +11,10 @@ import ru.intodayer.altarixrestapitask.models.Employee;
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
-    Department findDepartmentByParentDepartmentIsNull();
+//    Department findDepartmentByParentDepartmentIsNull();
+
+    @Query("select d from Department d where d.parentDepartment is null")
+    Department getRootDepartment();
 
     Department findDepartmentByName(String name);
 

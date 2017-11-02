@@ -63,6 +63,29 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public void changeEmployeesDepartment(long depId, long newDepId) {
+        Department department = departmentRepository.findOne(depId);
+        Department newDepartment = departmentRepository.findOne(newDepId);
+
+        if (department == null) {
+            throw new Service404Exception(
+                Service404Exception.getDepartmentDoesNotExistMessage(depId)
+            );
+        }
+
+        if (newDepartment == null) {
+            throw new Service404Exception(
+                Service404Exception.getDepartmentDoesNotExistMessage(newDepId)
+            );
+        }
+
+        for (Employee e: department.getEmployees()) {
+            e.setDepartment(newDepartment);
+        }
+        departmentRepository.save(department);
+    }
+
+    @Override
     public void changeEmployeesDepartment(long depId, long empId, long newDepId) {
         Employee employee = employeeRepository.findEmployeeByIdAndDepartmentId(empId, depId);
         Department newDepartment = departmentRepository.findOne(newDepId);

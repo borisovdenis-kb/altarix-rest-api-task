@@ -16,8 +16,8 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @RequestMapping(path = "/departments", method = RequestMethod.POST)
-    public void addDepartment(@RequestBody Department department) {
-        departmentService.addDepartment(department);
+    public void addDepartment(@RequestBody String json) {
+        departmentService.addDepartment(json);
     }
 
     @RequestMapping(path = "/departments/{id}", method = RequestMethod.PUT)
