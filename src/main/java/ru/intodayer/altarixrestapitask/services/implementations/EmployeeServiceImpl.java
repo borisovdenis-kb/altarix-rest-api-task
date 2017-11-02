@@ -12,6 +12,7 @@ import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.repositories.EmployeeRepository;
 import ru.intodayer.altarixrestapitask.repositories.PositionRepository;
 import ru.intodayer.altarixrestapitask.services.EmployeeService;
+import ru.intodayer.altarixrestapitask.services.exceptions.Service403Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service404Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service500Exception;
 import java.io.IOException;
@@ -128,37 +129,61 @@ public class EmployeeServiceImpl implements EmployeeService {
         return LocalDate.parse(strDate, dtf);
     }
 
+    private void setDataFromJsonToEmployee(Employee employee, String json) throws IOException {
+        Map<String, Object> jsonMap = getMapFromJsonString(json);
+        employee.setFirstName((String) jsonMap.get("firstName"));
+        employee.setLastName((String) jsonMap.get("lastName"));
+        employee.setGender(Gender.stringToEnum((String) jsonMap.get("gender")));
+        employee.setPhone((String) jsonMap.get("phone"));
+        employee.setEmail((String) jsonMap.get("email"));
+        employee.setSalary(Double.parseDouble((String) jsonMap.get("salary")));
+        employee.setBirthday(stringToLocalDate((String) jsonMap.get("birthDay")));
+
+        employee.setChief(Boolean.parseBoolean((String) jsonMap.get("isChief")));
+        Employee chief = departmentRepository.getDepartmentChief(employee.getDepartment());
+        if (chief != null && employee.getChief() && employee.getId() != chief.getId()) {
+            throw new Service403Exception(
+                "Chief of department id=" + employee.getDepartment().getId()  + " already exist."
+            );
+        }
+
+        Long positionId = Long.parseLong((String) jsonMap.get("positionId"));
+        Position position = positionRepository.findOne(positionId);
+        if (position == null) {
+            throw new Service404Exception(
+                Service404Exception.getPositionDoesNotExistMessage(positionId)
+            );
+        }
+        employee.setPosition(position);
+    }
+
     @Override
     public void addNewEmployeeToDepartment(long depId, String json) {
         try {
-            Map<String, Object> jsonMap = getMapFromJsonString(json);
             Employee employee = new Employee();
-            employee.setFirstName((String) jsonMap.get("firstName"));
-            employee.setLastName((String) jsonMap.get("lastName"));
-            employee.setGender(Gender.stringToEnum((String) jsonMap.get("gender")));
-            employee.setPhone((String) jsonMap.get("phone"));
-            employee.setEmail((String) jsonMap.get("email"));
-            employee.setSalary(Double.parseDouble((String) jsonMap.get("salary")));
-            employee.setChief(Boolean.parseBoolean((String) jsonMap.get("isChief")));
-            employee.setBirthday(stringToLocalDate((String) jsonMap.get("birthDay")));
-
-            Long positionId = Long.parseLong((String) jsonMap.get("positionId"));
-            Position position = positionRepository.findOne(positionId);
-
-            if (position == null) {
-                throw new Service404Exception(
-                    Service404Exception.getPositionDoesNotExistMessage(depId)
-                );
-            }
-            employee.setPosition(position);
+            setDataFromJsonToEmployee(employee, json);
 
             Department department = departmentRepository.findOne(depId);
             if (department == null) {
                 throw new Service404Exception(
-                    Service404Exception.getDepartmentDoesNotExistMessage(depId)
+                        Service404Exception.getDepartmentDoesNotExistMessage(depId)
                 );
             }
             employee.setDepartment(department);
+
+            employeeRepository.save(employee);
+        } catch (IOException e) {
+            throw new Service500Exception(
+                Service500Exception.getFromJsonConvertingMessage(), e
+            );
+        }
+    }
+
+    @Override
+    public void updateEmployee(long id, String json) {
+        try {
+            Employee employee = getEntityIfExist(id);
+            setDataFromJsonToEmployee(employee, json);
             employeeRepository.save(employee);
         } catch (IOException e) {
             throw new Service500Exception(

@@ -50,4 +50,9 @@ public class EmployeeController {
     public void changeEmployeesDepartment(@PathVariable long depId, @PathVariable long newDepId) {
         employeeService.changeEmployeesDepartment(depId, newDepId);
     }
+
+    @RequestMapping(path = "/employees/{id}", method = RequestMethod.PUT)
+    public void updateEmployee(@PathVariable long id, @RequestBody String json) {
+        employeeService.updateEmployee(id, json);
+    }
 }

@@ -1,7 +1,7 @@
 package ru.intodayer.altarixrestapitask.services;
 
-
 import ru.intodayer.altarixrestapitask.models.Employee;
+
 
 public interface EmployeeService {
     Employee getEmployee(long id);
@@ -15,4 +15,6 @@ public interface EmployeeService {
     void changeEmployeesDepartment(long depId, long empId, long newDepId);
 
     void addNewEmployeeToDepartment(long depId, String json);
+
+    void updateEmployee(long id, String json);
 }
