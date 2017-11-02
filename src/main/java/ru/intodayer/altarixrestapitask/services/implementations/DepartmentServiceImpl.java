@@ -1,12 +1,10 @@
 package ru.intodayer.altarixrestapitask.services.implementations;
 
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
@@ -15,7 +13,6 @@ import ru.intodayer.altarixrestapitask.services.exceptions.Service400Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service403Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service404Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service500Exception;
-
 import java.io.IOException;
 import java.util.*;
 
@@ -41,44 +38,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         return mapper.readValue(json, new TypeReference<Map<String, String>>(){});
     }
 
-    // TODO: may be change approach of creating department
-    @Override
-    public void addDepartment(String json) {
-        try {
-            Map<String, Object> jsonMap = getMapFromJsonString(json);
-            String name = (String) jsonMap.get("name");
-
-            if (departmentRepository.findDepartmentByName(name) != null) {
-                throw new Service400Exception(
-                    Service400Exception.getDublicateDepartmentNameMessage(name)
-                );
-            }
-
-            Department newDepartment = new Department(
-                name,
-                null,
-                null
-            );
-
-            if (!jsonMap.containsKey("department_id")) {
-                Department rootDepartment = departmentRepository.getRootDepartment();
-                if (rootDepartment != null) {
-                    rootDepartment.setParentDepartment(newDepartment);
-                }
-            } else {
-                Long newDepId = Long.parseLong((String) jsonMap.get("department_id"));
-                Department parentDep = getEntityIfExist(newDepId);
-                newDepartment.setParentDepartment(parentDep);
-            }
-
-            departmentRepository.save(newDepartment);
-        } catch (IOException e) {
-            throw new Service500Exception(
-                "Error while converting json -> map.", e
-            );
-        }
-    }
-
     @Override
     public void updateDepartmentName(long id, Department department) {
         Department targetDepartment = getEntityIfExist(id);
@@ -95,8 +54,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         targetDepartment.setName(department.getName());
         departmentRepository.save(targetDepartment);
     }
-
-
 
     /**
      * It is assumed that when a department is deleted, all sub-departments
@@ -229,5 +186,43 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department newParentDepartment = getEntityIfExist(newParentDepId);
         department.setParentDepartment(newParentDepartment);
         departmentRepository.save(department);
+    }
+
+    // TODO: may be change approach of creating department
+    @Override
+    public void addDepartment(String json) {
+        try {
+            Map<String, Object> jsonMap = getMapFromJsonString(json);
+            String name = (String) jsonMap.get("name");
+
+            if (departmentRepository.findDepartmentByName(name) != null) {
+                throw new Service400Exception(
+                        Service400Exception.getDublicateDepartmentNameMessage(name)
+                );
+            }
+
+            Department newDepartment = new Department(
+                name,
+                null,
+                null
+            );
+
+            if (!jsonMap.containsKey("department_id")) {
+                Department rootDepartment = departmentRepository.getRootDepartment();
+                if (rootDepartment != null) {
+                    rootDepartment.setParentDepartment(newDepartment);
+                }
+            } else {
+                Long newDepId = Long.parseLong((String) jsonMap.get("department_id"));
+                Department parentDep = getEntityIfExist(newDepId);
+                newDepartment.setParentDepartment(parentDep);
+            }
+
+            departmentRepository.save(newDepartment);
+        } catch (IOException e) {
+            throw new Service500Exception(
+                    Service500Exception.getFromJsonConvertingMessage(), e
+            );
+        }
     }
 }

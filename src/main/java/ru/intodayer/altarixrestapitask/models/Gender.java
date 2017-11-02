@@ -16,8 +16,14 @@ public enum Gender {
 
     public static Gender stringToEnum(String shortName) {
         switch (shortName) {
-            case "M": return Gender.MAN;
-            case "W": return Gender.MAN;
+            case "M":
+                return Gender.MAN;
+            case "W":
+                return Gender.WOMAN;
+            case "MAN":
+                return Gender.MAN;
+            case "WOMAN":
+                return Gender.WOMAN;
             default:
                 throw new IllegalArgumentException(
                     "ShortName [" + shortName + "] not supported."

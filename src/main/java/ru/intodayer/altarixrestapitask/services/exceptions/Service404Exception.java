@@ -14,6 +14,11 @@ public class Service404Exception extends RuntimeException {
         super(message);
     }
 
+    public static String getPositionDoesNotExistMessage(long id) {
+        String positionDoesNotExist = "Position entity with id=%s does not exist.";
+        return String.format(positionDoesNotExist, id);
+    }
+
     public static String getEmployeeDoesNotExistMessage(long id) {
         String employeeDoesNotExist = "Employee entity with id=%s does not exist.";
         return String.format(employeeDoesNotExist, id);

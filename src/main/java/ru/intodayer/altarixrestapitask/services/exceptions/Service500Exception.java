@@ -16,4 +16,8 @@ public class Service500Exception extends RuntimeException {
     public Service500Exception(String message, Throwable cause) {
         super(message, cause);
     }
+
+    public static String getFromJsonConvertingMessage() {
+        return "Error while converting json -> map.";
+    }
 }

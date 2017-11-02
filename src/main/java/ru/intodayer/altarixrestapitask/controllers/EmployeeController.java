@@ -14,8 +14,8 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @RequestMapping(path = "/departments/{depId}/employees", method = RequestMethod.POST)
-    public void addNewEmployeeToDepartment(@PathVariable long depId, @RequestBody Employee employee) {
-        employeeService.addNewEmployeeToDepartment(depId, employee);
+    public void addNewEmployeeToDepartment(@PathVariable long depId, @RequestBody String json) {
+        employeeService.addNewEmployeeToDepartment(depId, json);
     }
 
     @RequestMapping(path = "/employees/{id}", method = RequestMethod.GET)
