@@ -45,6 +45,11 @@ public class DepartmentController {
     }
 
     @RequestMapping(path = "/departments/{id}/subdepartments", method = RequestMethod.GET)
+    public Set<Department> getSubdepartments(@PathVariable long id) {
+        return departmentService.getSubDepartments(id);
+    }
+
+    @RequestMapping(path = "/departments/{id}/subdepartments", params = {"level"}, method = RequestMethod.GET)
     public Set<Department> getSubDepartments(@PathVariable long id, @RequestParam int level) {
         return departmentService.getSubDepartments(id, level);
     }

@@ -13,6 +13,8 @@ public interface DepartmentService {
 
     void deleteDepartment(long id);
 
+    Set<Department> getSubDepartments(long id);
+
     Set<Department> getSubDepartments(long id, int level);
 
     String getDepartment(long id);

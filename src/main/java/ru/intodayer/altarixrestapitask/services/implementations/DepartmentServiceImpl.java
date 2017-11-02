@@ -81,6 +81,23 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
+    public Set<Department> getSubDepartments(long id) {
+        Department department = getEntityIfExist(id);
+        Set<Department> allSubDepartments = new HashSet<>();
+        Stack<Department> stack = new Stack<>();
+
+        stack.addAll(department.getChildDepartments());
+        while (!stack.empty()) {
+            Department top = stack.pop();
+            if (!allSubDepartments.contains(top)) {
+                allSubDepartments.add(top);
+                stack.addAll(top.getChildDepartments());
+            }
+        }
+        return allSubDepartments;
+    }
+
+    @Override
     public Set<Department> getSubDepartments(long id, int level) {
         Department department = getEntityIfExist(id);
 
