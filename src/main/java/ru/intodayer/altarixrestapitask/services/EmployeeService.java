@@ -13,4 +13,6 @@ public interface EmployeeService {
     void changeEmployeesDepartment(long depId, long newDepId);
 
     void changeEmployeesDepartment(long depId, long empId, long newDepId);
+
+    void addNewEmployeeToDepartment(long depId, Employee employee);
 }

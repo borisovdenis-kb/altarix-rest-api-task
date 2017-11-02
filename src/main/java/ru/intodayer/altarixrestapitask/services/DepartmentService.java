@@ -26,4 +26,6 @@ public interface DepartmentService {
     String getDepartmentFund(long id);
 
     Set<Employee> getDepartmentEmployees(long id);
+
+    void changeParentDepartment(long depId, long newDepId);
 }

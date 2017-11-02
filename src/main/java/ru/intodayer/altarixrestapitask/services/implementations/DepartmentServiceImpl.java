@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
@@ -39,6 +41,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return mapper.readValue(json, new TypeReference<Map<String, String>>(){});
     }
 
+    // TODO: may be change approach of creating department
     @Override
     public void addDepartment(String json) {
         try {
@@ -92,6 +95,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         targetDepartment.setName(department.getName());
         departmentRepository.save(targetDepartment);
     }
+
+
 
     /**
      * It is assumed that when a department is deleted, all sub-departments
@@ -216,5 +221,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Set<Employee> getDepartmentEmployees(long id) {
         Department department = getEntityIfExist(id);
         return department.getEmployees();
+    }
+
+    @Override
+    public void changeParentDepartment(long depId, long newParentDepId) {
+        Department department = getEntityIfExist(depId);
+        Department newParentDepartment = getEntityIfExist(newParentDepId);
+        department.setParentDepartment(newParentDepartment);
+        departmentRepository.save(department);
     }
 }

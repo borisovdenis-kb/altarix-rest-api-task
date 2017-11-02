@@ -32,6 +32,7 @@ public class Employee implements Serializable {
     @Column(name = "gender", nullable = false)
     private Gender gender;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "birth_day", nullable = false)
     private Date birthday;
 
@@ -41,10 +42,12 @@ public class Employee implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "employment_date", nullable = false, updatable = false)
     @CreatedDate
     private Date employmentDate;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "dismissal_date")
     private Date dismissalDate;
 

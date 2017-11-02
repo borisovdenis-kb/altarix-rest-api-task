@@ -105,4 +105,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setDepartment(newDepartment);
         employeeRepository.save(employee);
     }
+
+    @Override
+    public void addNewEmployeeToDepartment(long depId, Employee employee) {
+        Department department = departmentRepository.findOne(depId);
+        if (department == null) {
+            throw new Service404Exception(
+                Service404Exception.getDepartmentDoesNotExistMessage(depId)
+            );
+        }
+        employee.setDepartment(department);
+        employeeRepository.save(employee);
+    }
 }
