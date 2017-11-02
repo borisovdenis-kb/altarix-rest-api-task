@@ -8,6 +8,8 @@ import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.repositories.EmployeeRepository;
 import ru.intodayer.altarixrestapitask.services.EmployeeService;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service404Exception;
+
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -58,7 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         employee.setDepartment(null);
-        employee.setDismissalDate(new Date());
+        employee.setDismissalDate(LocalDate.now());
         employeeRepository.save(employee);
     }
 

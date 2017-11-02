@@ -5,6 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -32,9 +33,8 @@ public class Employee implements Serializable {
     @Column(name = "gender", nullable = false)
     private Gender gender;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "birth_day", nullable = false)
-    private Date birthday;
+    private LocalDate birthday;
 
     @Column(name = "phone", nullable = false)
     private String phone;
@@ -42,14 +42,12 @@ public class Employee implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "employment_date", nullable = false, updatable = false)
     @CreatedDate
-    private Date employmentDate;
+    private LocalDate employmentDate;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "dismissal_date")
-    private Date dismissalDate;
+    private LocalDate dismissalDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "position_id")
@@ -108,11 +106,11 @@ public class Employee implements Serializable {
         this.gender = gender;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 
@@ -132,19 +130,19 @@ public class Employee implements Serializable {
         this.email = email;
     }
 
-    public Date getEmploymentDate() {
+    public LocalDate getEmploymentDate() {
         return employmentDate;
     }
 
-    public void setEmploymentDate(Date employmentDate) {
+    public void setEmploymentDate(LocalDate employmentDate) {
         this.employmentDate = employmentDate;
     }
 
-    public Date getDismissalDate() {
+    public LocalDate getDismissalDate() {
         return dismissalDate;
     }
 
-    public void setDismissalDate(Date dismissalDate) {
+    public void setDismissalDate(LocalDate dismissalDate) {
         this.dismissalDate = dismissalDate;
     }
 
