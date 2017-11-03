@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.Set;
 
 
 @Service
@@ -66,7 +67,26 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteEmployeeFromDepartment(long depId, long empId) {
+    public Set<Employee> getEmployeeByGenderSalaryBirthDay(Gender gender, double salary, String birthDay) {
+        LocalDate birthDate = stringToLocalDate(birthDay);
+        return employeeRepository.findEmployeeByGenderAndSalaryAndBirthday(gender, salary, birthDate);
+    }
+
+    @Override
+    public void updateEmployee(long id, String json) {
+        try {
+            Employee employee = getEntityIfExist(id);
+            setDataFromJsonToEmployee(employee, json);
+            employeeRepository.save(employee);
+        } catch (IOException e) {
+            throw new Service500Exception(
+                    Service500Exception.getFromJsonConvertingMessage(), e
+            );
+        }
+    }
+
+    @Override
+    public void dismissEmployeeFromDepartment(long depId, long empId) {
         Employee employee = employeeRepository.getDismissableEmployee(depId, empId);
 
         if (employee == null) {
@@ -178,29 +198,4 @@ public class EmployeeServiceImpl implements EmployeeService {
             );
         }
     }
-
-    @Override
-    public void updateEmployee(long id, String json) {
-        try {
-            Employee employee = getEntityIfExist(id);
-            setDataFromJsonToEmployee(employee, json);
-            employeeRepository.save(employee);
-        } catch (IOException e) {
-            throw new Service500Exception(
-                Service500Exception.getFromJsonConvertingMessage(), e
-            );
-        }
-    }
-
-//    @Override
-//    public void addNewEmployeeToDepartment(long depId, Employee employee) {
-//        Department department = departmentRepository.findOne(depId);
-//        if (department == null) {
-//            throw new Service404Exception(
-//                Service404Exception.getDepartmentDoesNotExistMessage(depId)
-//            );
-//        }
-//        employee.setDepartment(department);
-//        employeeRepository.save(employee);
-//    }
 }

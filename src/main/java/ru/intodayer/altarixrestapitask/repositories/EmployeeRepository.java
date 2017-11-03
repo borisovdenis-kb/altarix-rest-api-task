@@ -4,6 +4,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.intodayer.altarixrestapitask.models.Employee;
+import ru.intodayer.altarixrestapitask.models.Gender;
+
+import java.time.LocalDate;
+import java.util.Set;
 
 
 @Repository
@@ -15,9 +19,11 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
                 "ON emp.department_id = dep.id " +
                 "AND dep.id = ?1 " +
                 "AND emp.id = ?2 " +
-                "AND emp.dismissal_date IS null",
-        nativeQuery = true)
+                "AND emp.dismissal_date IS null", nativeQuery = true
+    )
     Employee getDismissableEmployee(long departmentId, long employeeId);
 
     Employee findEmployeeByIdAndDepartmentId(long employeeId, long departmentId);
+
+    Set<Employee> findEmployeeByGenderAndSalaryAndBirthday(Gender gender, Double salary, LocalDate birthDay);
 }
