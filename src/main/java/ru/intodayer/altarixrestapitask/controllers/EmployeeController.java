@@ -17,8 +17,8 @@ public class EmployeeController {
 
     @RequestMapping(path = "/employees", params = {"gender", "salary", "birthDay"}, method = RequestMethod.GET)
     public Set<Employee> getEmployeeByGenderSalaryBirthDay(@RequestParam Gender gender,
-                                                                @RequestParam double salary,
-                                                                    @RequestParam String birthDay) {
+                                                           @RequestParam double salary,
+                                                           @RequestParam String birthDay) {
         return employeeService.getEmployeeByGenderSalaryBirthDay(gender, salary, birthDay);
     }
 
@@ -52,8 +52,8 @@ public class EmployeeController {
         method = RequestMethod.PUT
     )
     public void changeEmployeesDepartment(@PathVariable long depId,
-                                                @PathVariable long empId,
-                                                    @PathVariable long newDepId) {
+                                          @PathVariable long empId,
+                                          @PathVariable long newDepId) {
         employeeService.changeEmployeesDepartment(depId, empId, newDepId);
     }
 
