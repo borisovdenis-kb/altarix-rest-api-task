@@ -156,14 +156,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public String getDepartmentFund(long id) {
         Department department = getEntityIfExist(id);
-        Double sum = department.getEmployees()
-            .stream()
-            .mapToDouble((e) -> e.getSalary())
-            .sum();
+        Double sum = departmentRepository.getDepartmentFund(department);
 
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> jsonConstructor = new HashMap<>();
-        jsonConstructor.put("departmentFund", sum);
+        jsonConstructor.put("departmentFund", sum != null ? sum : 0);
 
         try {
             return mapper.writeValueAsString(jsonConstructor);

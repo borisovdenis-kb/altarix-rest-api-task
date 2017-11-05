@@ -1,9 +1,9 @@
 package ru.intodayer.altarixrestapitask.services.implementations;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.models.Gender;
@@ -76,7 +76,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void updateEmployee(long id, String json) {
         try {
             Employee employee = getEntityIfExist(id);
-            setDataFromJsonToEmployee(employee, json);
+            setDataFromJsonToEmployee(employee, employee.getDepartment(), json);
             employeeRepository.save(employee);
         } catch (IOException e) {
             throw new Service500Exception(
@@ -149,7 +149,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return LocalDate.parse(strDate, dtf);
     }
 
-    private void setDataFromJsonToEmployee(Employee employee, String json) throws IOException {
+    private void setDataFromJsonToEmployee(Employee employee, Department department, String json) throws IOException {
         Map<String, Object> jsonMap = getMapFromJsonString(json);
         employee.setFirstName((String) jsonMap.get("firstName"));
         employee.setLastName((String) jsonMap.get("lastName"));
@@ -159,13 +159,15 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setSalary(Double.parseDouble((String) jsonMap.get("salary")));
         employee.setBirthday(stringToLocalDate((String) jsonMap.get("birthDay")));
 
-        employee.setChief(Boolean.parseBoolean((String) jsonMap.get("isChief")));
-        Employee chief = departmentRepository.getDepartmentChief(employee.getDepartment());
-        if (chief != null && employee.getChief() && employee.getId() != chief.getId()) {
+        boolean isChief = Boolean.parseBoolean((String) jsonMap.get("isChief"));
+        Employee chief = departmentRepository.getDepartmentChief(department);
+
+        if (chief != null && isChief && employee.getId() != chief.getId()) {
             throw new Service403Exception(
-                "Chief of department id=" + employee.getDepartment().getId()  + " already exist."
+                "Chief of department id=" + department.getId()  + " already exist."
             );
         }
+        employee.setChief(isChief);
 
         Long positionId = Long.parseLong((String) jsonMap.get("positionId"));
         Position position = positionRepository.findOne(positionId);
@@ -181,16 +183,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void addNewEmployeeToDepartment(long depId, String json) {
         try {
             Employee employee = new Employee();
-            setDataFromJsonToEmployee(employee, json);
-
             Department department = departmentRepository.findOne(depId);
             if (department == null) {
                 throw new Service404Exception(
-                        Service404Exception.getDepartmentDoesNotExistMessage(depId)
+                    Service404Exception.getDepartmentDoesNotExistMessage(depId)
                 );
             }
+            setDataFromJsonToEmployee(employee, department, json);
             employee.setDepartment(department);
-
             employeeRepository.save(employee);
         } catch (IOException e) {
             throw new Service500Exception(

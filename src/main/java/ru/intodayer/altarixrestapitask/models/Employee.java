@@ -49,7 +49,7 @@ public class Employee implements Serializable {
     private LocalDate dismissalDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "position_id")
+    @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 
     @Column(name = "salary", nullable = false)
@@ -67,10 +67,6 @@ public class Employee implements Serializable {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getLastName() {
@@ -169,7 +165,7 @@ public class Employee implements Serializable {
         this.department = department;
     }
 
-    public Boolean getChief() {
+    public Boolean isChief() {
         return isChief;
     }
 

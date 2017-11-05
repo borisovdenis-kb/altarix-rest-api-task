@@ -1,8 +1,8 @@
 package ru.intodayer.altarixrestapitask.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.intodayer.altarixrestapitask.models.Position;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 
 @Repository

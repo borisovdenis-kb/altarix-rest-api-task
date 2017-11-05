@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.models.Gender;
-
 import java.time.LocalDate;
 import java.util.Set;
 

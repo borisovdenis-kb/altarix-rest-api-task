@@ -6,8 +6,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 
@@ -43,6 +41,10 @@ public class Department implements Serializable {
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Employee> employees;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private Set<DepartmentFund> fundHistory;
+
     protected Department() {}
 
     public Department(String name, LocalDate createDate, Department parentDepartment) {
@@ -53,10 +55,6 @@ public class Department implements Serializable {
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {
