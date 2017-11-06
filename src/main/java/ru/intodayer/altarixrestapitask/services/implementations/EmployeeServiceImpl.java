@@ -8,6 +8,7 @@ import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.models.Gender;
 import ru.intodayer.altarixrestapitask.models.Position;
+import ru.intodayer.altarixrestapitask.models.validators.ModelValidator;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.repositories.EmployeeRepository;
 import ru.intodayer.altarixrestapitask.repositories.PositionRepository;
@@ -15,6 +16,10 @@ import ru.intodayer.altarixrestapitask.services.EmployeeService;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service403Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service404Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service500Exception;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +38,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private PositionRepository positionRepository;
+
+    @Autowired
+    private ModelValidator<Employee> validator;
 
     private Map<String, Object> getMapFromJsonString(String json) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -191,6 +199,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
             setDataFromJsonToEmployee(employee, department, json);
             employee.setDepartment(department);
+
+            validator.validate(employee);
             employeeRepository.save(employee);
         } catch (IOException e) {
             throw new Service500Exception(

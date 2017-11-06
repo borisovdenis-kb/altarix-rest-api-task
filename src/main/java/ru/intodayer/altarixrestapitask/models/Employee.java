@@ -1,5 +1,6 @@
 package ru.intodayer.altarixrestapitask.models;
 
+import javax.validation.constraints.Min;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -52,6 +53,7 @@ public class Employee implements Serializable {
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 
+    @Min(value = 999, message = "Salary must be equals or greater than 999.")
     @Column(name = "salary", nullable = false)
     private Double salary;
 
