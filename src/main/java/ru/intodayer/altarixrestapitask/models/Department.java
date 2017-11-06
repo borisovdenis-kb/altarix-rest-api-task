@@ -30,7 +30,7 @@ public class Department implements Serializable {
     private LocalDate createDate;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "parentDepartment", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "parentDepartment", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<Department> childDepartments;
 
     @JsonIgnore
@@ -39,11 +39,11 @@ public class Department implements Serializable {
     private Department parentDepartment;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Employee> employees;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<DepartmentFund> fundHistory;
 
     protected Department() {}
