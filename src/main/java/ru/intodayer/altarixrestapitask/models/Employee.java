@@ -1,13 +1,11 @@
 package ru.intodayer.altarixrestapitask.models;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import ru.intodayer.altarixrestapitask.models.validators.implementations.ModelValidatorImpl;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -56,12 +54,20 @@ public class Employee implements Serializable {
     @NotNull(message = "birth_day " + ModelValidatorImpl.NOT_NULL_MSG)
     private LocalDate birthday;
 
+    /* It is assumed that the contact phone can be a mobile phone or some internal work phone.
+     * Therefore there is no regular expression for the phone format +7(XXX)XXX-XX-XX.
+     */
     @Column(name = "phone")
     @NotNull(message = "phone " + ModelValidatorImpl.NOT_NULL_MSG)
+    @Pattern(regexp = "[0-9+\\-() ]+", message = "phone must match the pattern [0-9+\\-() ]")
     private String phone;
 
     @Column(name = "email")
     @NotNull(message = "email " + ModelValidatorImpl.NOT_NULL_MSG)
+    @Pattern(
+        regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9]+$",
+        message = "email must math the pattern ^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9]+$."
+    )
     private String email;
 
     @Column(name = "employment_date ", nullable = false, updatable = false)
@@ -75,13 +81,13 @@ public class Employee implements Serializable {
     @JoinColumn(name = "position_id", nullable = false)
     private Position position;
 
-    @Min(value = 999, message = "Salary must be equals or greater than 999.")
     @Column(name = "salary", nullable = false)
+    @NotNull(message = "salary " + ModelValidatorImpl.NOT_NULL_MSG)
     private Double salary;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id", nullable = false)
+    @JoinColumn(name = "department_id")
     private Department department;
 
     @Column(name = "is_chief", nullable = false)

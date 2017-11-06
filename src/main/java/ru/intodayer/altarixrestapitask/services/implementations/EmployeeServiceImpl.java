@@ -9,6 +9,7 @@ import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.models.Gender;
 import ru.intodayer.altarixrestapitask.models.Position;
 import ru.intodayer.altarixrestapitask.models.validators.ModelValidator;
+import ru.intodayer.altarixrestapitask.models.validators.implementations.ModelValidatorImpl;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.repositories.EmployeeRepository;
 import ru.intodayer.altarixrestapitask.repositories.PositionRepository;
@@ -17,10 +18,6 @@ import ru.intodayer.altarixrestapitask.services.exceptions.Service400Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service403Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service404Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service500Exception;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +39,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     private PositionRepository positionRepository;
 
     @Autowired
-    private ModelValidator<Employee> validator;
+    private ModelValidator<Employee> employeeValidator;
+
+    @Autowired
+    private ModelValidator<Department> departmentValidator;
 
     private Map<String, Object> getMapFromJsonString(String json) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -84,6 +84,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                 "Chief of employee with id " + id + " does't exist."
             );
         }
+        if (chief.getId() == id) {
+            throw new Service400Exception(
+                "Employee with id " + id + " is chief."
+            );
+        }
         return chief;
     }
 
@@ -98,6 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             Employee employee = getEntityIfExist(id);
             setDataFromJsonToEmployee(employee, employee.getDepartment(), json);
+            employeeValidator.validate(employee);
             employeeRepository.save(employee);
         } catch (IOException e) {
             throw new Service500Exception(
@@ -115,9 +121,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                 "Dismissable " + Service404Exception.getEmpWoringInDepDoesNotExistMessage(empId, depId)
             );
         }
-
         employee.setDepartment(null);
         employee.setDismissalDate(LocalDate.now());
+        employeeValidator.validate(employee);
         employeeRepository.save(employee);
     }
 
@@ -141,6 +147,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         for (Employee e: department.getEmployees()) {
             e.setDepartment(newDepartment);
         }
+        departmentValidator.validate(department);
         departmentRepository.save(department);
     }
 
@@ -160,8 +167,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 Service404Exception.getDepartmentDoesNotExistMessage(newDepId)
             );
         }
-
         employee.setDepartment(newDepartment);
+        employeeValidator.validate(employee);
         employeeRepository.save(employee);
     }
 
@@ -182,7 +189,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setGender(Gender.stringToEnum((String) jsonMap.get("gender")));
         employee.setPhone((String) jsonMap.get("phone"));
         employee.setEmail((String) jsonMap.get("email"));
-        employee.setSalary(Double.parseDouble((String) jsonMap.get("salary")));
         employee.setBirthday(stringToLocalDate((String) jsonMap.get("birthDay")));
 
         boolean isChief = Boolean.parseBoolean((String) jsonMap.get("isChief"));
@@ -194,6 +200,17 @@ public class EmployeeServiceImpl implements EmployeeService {
             );
         }
         employee.setChief(isChief);
+
+        String salaryStr = (String) jsonMap.get("salary");
+        ModelValidatorImpl.validateDoubleField(salaryStr, "salary");
+        Double salary = Double.parseDouble(salaryStr);
+
+        if (chief != null && !employee.isChief() && salary > chief.getSalary()) {
+            throw new Service400Exception(
+                "Salary of employee can not be greater than salary of his chief."
+            );
+        }
+        employee.setSalary(salary);
 
         Long positionId = Long.parseLong((String) jsonMap.get("positionId"));
         Position position = positionRepository.findOne(positionId);
@@ -218,7 +235,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             setDataFromJsonToEmployee(employee, department, json);
             employee.setDepartment(department);
 
-            validator.validate(employee);
+            employeeValidator.validate(employee);
             employeeRepository.save(employee);
         } catch (IOException e) {
             throw new Service500Exception(

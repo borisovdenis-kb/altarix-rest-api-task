@@ -1,6 +1,8 @@
 package ru.intodayer.altarixrestapitask.models;
 
 
+import ru.intodayer.altarixrestapitask.services.exceptions.Service400Exception;
+
 public enum Gender {
     MAN("M"), WOMAN("W");
 
@@ -25,7 +27,7 @@ public enum Gender {
             case "WOMAN":
                 return Gender.WOMAN;
             default:
-                throw new IllegalArgumentException(
+                throw new Service400Exception(
                     "ShortName [" + shortName + "] not supported."
                 );
         }

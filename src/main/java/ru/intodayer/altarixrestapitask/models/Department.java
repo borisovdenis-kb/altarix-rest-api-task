@@ -1,9 +1,10 @@
 package ru.intodayer.altarixrestapitask.models;
 
+import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ru.intodayer.altarixrestapitask.models.validators.implementations.ModelValidatorImpl;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -22,7 +23,8 @@ public class Department implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name")
+    @NotNull(message = "name " + ModelValidatorImpl.NOT_NULL_MSG)
     private String name;
 
     @Column(name = "create_date", nullable = false, updatable = false)
