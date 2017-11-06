@@ -8,11 +8,12 @@ import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.models.DepartmentFund;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentFundRepository;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
+import ru.intodayer.altarixrestapitask.services.DepartmentUtilityService;
 
 
 @Service
 @EnableScheduling
-public class DepartmentUtilityServiceImpl {
+public class DepartmentUtilityServiceImpl implements DepartmentUtilityService {
 
     private static final int SECOND = 1000;
     private static final int MINUTE = 60 * SECOND;
@@ -23,7 +24,8 @@ public class DepartmentUtilityServiceImpl {
     @Autowired
     private DepartmentFundRepository departmentFundRepository;
 
-    @Scheduled(fixedRate = MINUTE * 5)
+    @Scheduled(fixedRate = MINUTE * 60)
+    @Override
     public void saveDepartmentFundHistory() {
         for (Department department: departmentRepository.findAll()) {
             DepartmentFund departmentFund = new DepartmentFund();

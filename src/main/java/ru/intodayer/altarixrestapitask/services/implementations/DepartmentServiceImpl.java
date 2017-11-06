@@ -78,7 +78,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Set<Department> getSubDepartments(long id) {
+    public Set<Department> getAllSubDepartments(long id) {
         Department department = getEntityIfExist(id);
         Set<Department> allSubDepartments = new HashSet<>();
         Stack<Department> stack = new Stack<>();
@@ -95,16 +95,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Set<Department> getSubDepartments(long id, int level) {
+    public Set<Department> getChildDepartments(long id) {
         Department department = getEntityIfExist(id);
-
-        if (level == 1) {
-            return department.getChildDepartments();
-        } else {
-            throw new Service400Exception(
-                "Service is not yet able to return sub-departments to a level deeper than 1."
-            );
-        }
+        return department.getChildDepartments();
     }
 
     @Override
@@ -154,7 +147,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public String getDepartmentFund(long id) {
+    public String getDepartmentSalaryFund(long id) {
         Department department = getEntityIfExist(id);
         Double sum = departmentRepository.getDepartmentFund(department);
 
@@ -169,12 +162,6 @@ public class DepartmentServiceImpl implements DepartmentService {
                 "Error while converting map -> json.", e
             );
         }
-    }
-
-    @Override
-    public Set<Employee> getDepartmentEmployees(long id) {
-        Department department = getEntityIfExist(id);
-        return department.getEmployees();
     }
 
     @Override

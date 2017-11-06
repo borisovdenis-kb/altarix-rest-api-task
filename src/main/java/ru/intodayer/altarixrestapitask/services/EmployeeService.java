@@ -2,12 +2,13 @@ package ru.intodayer.altarixrestapitask.services;
 
 import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.models.Gender;
-
 import java.util.Set;
 
 
 public interface EmployeeService {
     Employee getEmployee(long id);
+
+    Set<Employee> getDepartmentEmployees(long depId);
 
     Employee getEmployeesChief(long id);
 

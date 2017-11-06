@@ -16,6 +16,10 @@ public class ModelValidatorImpl<T> implements ModelValidator<T> {
 
     private ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
 
+    public static final String CYRILLIC_REG_EXP = "[а-яёА-ЯЁ\\-]+";
+
+    public static final String NOT_NULL_MSG = "can not be null";
+
     @Override
     public void validate(T model) {
         Validator validator = validatorFactory.getValidator();
@@ -27,7 +31,7 @@ public class ModelValidatorImpl<T> implements ModelValidator<T> {
             for (ConstraintViolation<T> v: constraintViolations) {
                 violationMessages.add(v.getMessage());
             }
-            throw new Service400Exception(violationMessages.toString());
+            throw new Service400Exception("Validation error: " + violationMessages.toString());
         }
     }
 }

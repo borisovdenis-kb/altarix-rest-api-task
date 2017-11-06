@@ -5,9 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.models.Gender;
 import ru.intodayer.altarixrestapitask.services.EmployeeService;
-import ru.intodayer.altarixrestapitask.services.exceptions.Service400Exception;
-
-import javax.validation.ConstraintViolationException;
 import java.util.Set;
 
 
@@ -28,6 +25,11 @@ public class EmployeeController {
     @RequestMapping(path = "/employees/{id}", method = RequestMethod.GET)
     public Employee getEmployee(@PathVariable long id) {
         return employeeService.getEmployee(id);
+    }
+
+    @RequestMapping(path = "/departments/{depId}/employees", method = RequestMethod.GET)
+    public Set<Employee> getDepartmentEmployees(@PathVariable long depId) {
+        return employeeService.getDepartmentEmployees(depId);
     }
 
     @RequestMapping(path = "/employees/{id}", method = RequestMethod.PUT)

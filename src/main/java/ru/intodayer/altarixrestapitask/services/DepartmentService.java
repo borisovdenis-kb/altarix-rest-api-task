@@ -13,9 +13,9 @@ public interface DepartmentService {
 
     void deleteDepartment(long id);
 
-    Set<Department> getSubDepartments(long id);
+    Set<Department> getAllSubDepartments(long id);
 
-    Set<Department> getSubDepartments(long id, int level);
+    Set<Department> getChildDepartments(long id);
 
     String getDepartment(long id);
 
@@ -23,9 +23,9 @@ public interface DepartmentService {
 
     Set<Department> getParentDepartments(long id);
 
-    String getDepartmentFund(long id);
+    String getDepartmentSalaryFund(long id);
 
-    Set<Employee> getDepartmentEmployees(long id);
+//    Set<Employee> getDepartmentEmployees(long id);
 
     void changeParentDepartment(long depId, long newDepId);
 }

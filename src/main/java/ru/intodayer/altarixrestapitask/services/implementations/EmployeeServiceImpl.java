@@ -13,6 +13,7 @@ import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.repositories.EmployeeRepository;
 import ru.intodayer.altarixrestapitask.repositories.PositionRepository;
 import ru.intodayer.altarixrestapitask.services.EmployeeService;
+import ru.intodayer.altarixrestapitask.services.exceptions.Service400Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service403Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service404Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service500Exception;
@@ -23,6 +24,7 @@ import javax.validation.ValidatorFactory;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.Set;
 
@@ -63,6 +65,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public Set<Employee> getDepartmentEmployees(long depId) {
+        Department department = departmentRepository.findOne(depId);
+        if (department == null) {
+            throw new Service404Exception(
+                Service404Exception.getDepartmentDoesNotExistMessage(depId)
+            );
+        }
+        return department.getEmployees();
+    }
+
+    @Override
     public Employee getEmployeesChief(long id) {
         Employee employee = getEntityIfExist(id);
         Employee chief = departmentRepository.getDepartmentChief(employee.getDepartment());
@@ -88,7 +101,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employeeRepository.save(employee);
         } catch (IOException e) {
             throw new Service500Exception(
-                    Service500Exception.getFromJsonConvertingMessage(), e
+                Service500Exception.getFromJsonConvertingMessage(), e
             );
         }
     }
@@ -154,13 +167,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private LocalDate stringToLocalDate(String strDate) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        return LocalDate.parse(strDate, dtf);
+        try {
+            return LocalDate.parse(strDate, dtf);
+        } catch (DateTimeParseException e) {
+            throw new Service400Exception(e.getMessage());
+        }
     }
 
     private void setDataFromJsonToEmployee(Employee employee, Department department, String json) throws IOException {
         Map<String, Object> jsonMap = getMapFromJsonString(json);
         employee.setFirstName((String) jsonMap.get("firstName"));
         employee.setLastName((String) jsonMap.get("lastName"));
+        employee.setMiddleName((String) jsonMap.get("middleName"));
         employee.setGender(Gender.stringToEnum((String) jsonMap.get("gender")));
         employee.setPhone((String) jsonMap.get("phone"));
         employee.setEmail((String) jsonMap.get("email"));

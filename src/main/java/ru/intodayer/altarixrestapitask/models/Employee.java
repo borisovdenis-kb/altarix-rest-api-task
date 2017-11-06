@@ -1,9 +1,13 @@
 package ru.intodayer.altarixrestapitask.models;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ru.intodayer.altarixrestapitask.models.validators.implementations.ModelValidatorImpl;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -21,28 +25,46 @@ public class Employee implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "last_name")
+    @NotNull(message = "last_name " + ModelValidatorImpl.NOT_NULL_MSG)
+    @Pattern(
+        regexp = ModelValidatorImpl.CYRILLIC_REG_EXP,
+        message = "last_name must match the pattern " + ModelValidatorImpl.CYRILLIC_REG_EXP
+    )
     private String lastName;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "first_name")
+    @NotNull(message = "first_name " + ModelValidatorImpl.NOT_NULL_MSG)
+    @Pattern(
+        regexp = ModelValidatorImpl.CYRILLIC_REG_EXP,
+        message = "first_name must match the pattern " + ModelValidatorImpl.CYRILLIC_REG_EXP
+    )
     private String firstName;
 
     @Column(name = "middle_name")
+    @Pattern(
+        regexp = ModelValidatorImpl.CYRILLIC_REG_EXP,
+        message = "middle_name must match the pattern " + ModelValidatorImpl.CYRILLIC_REG_EXP
+    )
     private String middleName;
 
-    @Column(name = "gender", nullable = false)
+    @Column(name = "gender")
+    @NotNull(message = "gender " + ModelValidatorImpl.NOT_NULL_MSG)
     private Gender gender;
 
-    @Column(name = "birth_day", nullable = false)
+    @Column(name = "birth_day")
+    @NotNull(message = "birth_day " + ModelValidatorImpl.NOT_NULL_MSG)
     private LocalDate birthday;
 
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
+    @NotNull(message = "phone " + ModelValidatorImpl.NOT_NULL_MSG)
     private String phone;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
+    @NotNull(message = "email " + ModelValidatorImpl.NOT_NULL_MSG)
     private String email;
 
-    @Column(name = "employment_date", nullable = false, updatable = false)
+    @Column(name = "employment_date ", nullable = false, updatable = false)
     @CreatedDate
     private LocalDate employmentDate;
 
