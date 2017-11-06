@@ -122,7 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void changeEmployeesDepartment(long depId, long newDepId) {
+    public void transferAllEmployeesToAnotherDepartment(long depId, long newDepId) {
         Department department = departmentRepository.findOne(depId);
         Department newDepartment = departmentRepository.findOne(newDepId);
 
@@ -145,7 +145,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void changeEmployeesDepartment(long depId, long empId, long newDepId) {
+    public void transferEmployeeToAnotherDepartment(long depId, long empId, long newDepId) {
         Employee employee = employeeRepository.findEmployeeByIdAndDepartmentId(empId, depId);
         Department newDepartment = departmentRepository.findOne(newDepId);
 

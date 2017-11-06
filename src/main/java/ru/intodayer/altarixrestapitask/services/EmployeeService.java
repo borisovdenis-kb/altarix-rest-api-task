@@ -18,9 +18,9 @@ public interface EmployeeService {
 
     void dismissEmployeeFromDepartment(long depId, long empId);
 
-    void changeEmployeesDepartment(long depId, long newDepId);
+    void transferAllEmployeesToAnotherDepartment(long depId, long newDepId);
 
-    void changeEmployeesDepartment(long depId, long empId, long newDepId);
+    void transferEmployeeToAnotherDepartment(long depId, long empId, long newDepId);
 
     void addNewEmployeeToDepartment(long depId, String json);
 }

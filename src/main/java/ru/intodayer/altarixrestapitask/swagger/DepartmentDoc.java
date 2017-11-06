@@ -1,7 +1,7 @@
 package ru.intodayer.altarixrestapitask.swagger;
 
 
-public class DepartmentDocDescription {
+public class DepartmentDoc {
     public static final String ADD_DEPARTMENT_DESC =
         "Creating of a department. \n" +
         "When creating a department, you need to specify information about the parent department " +
