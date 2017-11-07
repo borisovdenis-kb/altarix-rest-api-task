@@ -37,7 +37,7 @@ public class Department implements Serializable {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "parent_department_id")
     private Department parentDepartment;
 
     @JsonIgnore
