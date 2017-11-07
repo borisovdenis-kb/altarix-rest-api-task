@@ -158,7 +158,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         return department;
     }
 
-    // TODO: may be change approach of creating department
     @Override
     public Department addDepartment(String departmentJson) {
         try {

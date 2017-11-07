@@ -16,11 +16,8 @@ import java.util.Set;
 
 @Component
 public class ModelValidatorImpl<T> implements ModelValidator<T> {
-
     public static final String CYRILLIC_REG_EXP = "[а-яёА-ЯЁ\\-]+";
-
     public static final String NOT_NULL_MSG = "can not be null";
-
     private ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
 
     public static double validateEmployeeSalaryField(String salaryStr, Employee employee, Employee chief) {

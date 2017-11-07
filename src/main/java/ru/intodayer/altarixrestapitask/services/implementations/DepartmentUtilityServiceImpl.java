@@ -12,7 +12,7 @@ import ru.intodayer.altarixrestapitask.services.DepartmentUtilityService;
 
 
 @Service
-//@EnableScheduling
+@EnableScheduling
 public class DepartmentUtilityServiceImpl implements DepartmentUtilityService {
 
     private static final int SECOND = 1000;
@@ -26,7 +26,7 @@ public class DepartmentUtilityServiceImpl implements DepartmentUtilityService {
 
     @Scheduled(fixedRate = MINUTE * 5)
     @Override
-    public void saveDepartmentFundHistory() {
+    public void logDepartmentFundHistory() {
         for (Department department: departmentRepository.findAll()) {
             DepartmentFund departmentFund = new DepartmentFund();
             departmentFund.setDepartment(department);

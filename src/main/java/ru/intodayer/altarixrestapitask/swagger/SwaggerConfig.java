@@ -29,7 +29,11 @@ public class SwaggerConfig {
             "Management of organizational and staff structure of the company.",
             "1.0",
             "",
-            new Contact("Borisov Denis","https://github.com/borisovdenis-kb/altarix-rest-api-task","borisovdenis-kb@yandex.ru"),
+            new Contact(
+                "Borisov Denis",
+                "https://github.com/borisovdenis-kb/altarix-rest-api-task",
+                "borisovdenis-kb@yandex.ru"
+            ),
             "",
             "",
             Collections.emptyList()
