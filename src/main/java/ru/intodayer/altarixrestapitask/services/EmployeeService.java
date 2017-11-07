@@ -14,7 +14,7 @@ public interface EmployeeService {
 
     Set<Employee> getEmployeeByGenderSalaryBirthDay(Gender gender, double salary, String birthDay);
 
-    void updateEmployee(long id, String json);
+    void updateEmployee(long id, String employeeJson);
 
     void dismissEmployeeFromDepartment(long depId, long empId);
 
@@ -22,5 +22,5 @@ public interface EmployeeService {
 
     void transferEmployeeToAnotherDepartment(long depId, long empId, long newDepId);
 
-    void addNewEmployeeToDepartment(long depId, String json);
+    void addNewEmployeeToDepartment(long depId, String employeeJson);
 }

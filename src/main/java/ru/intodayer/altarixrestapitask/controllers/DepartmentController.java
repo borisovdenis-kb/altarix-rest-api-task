@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.intodayer.altarixrestapitask.dto.DepartmentDto;
 import ru.intodayer.altarixrestapitask.dto.DtoConverter;
 import ru.intodayer.altarixrestapitask.models.Department;
-import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
 import ru.intodayer.altarixrestapitask.swagger.DepartmentDoc;
 import java.util.Set;
@@ -21,15 +20,12 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @Autowired
-    private DepartmentRepository departmentRepository;
-
-    @Autowired
     private DtoConverter dtoConverter;
 
     @ApiOperation(DepartmentDoc.ADD_DEPARTMENT_DESC)
     @RequestMapping(path = "/departments", method = RequestMethod.POST)
-    public void addDepartment(@RequestBody String json) {
-        departmentService.addDepartment(json);
+    public void addDepartment(@RequestBody String departmentJson) {
+        departmentService.addDepartment(departmentJson);
     }
 
     @ApiOperation(DepartmentDoc.UPDATE_DEPARTMENT_DESC)

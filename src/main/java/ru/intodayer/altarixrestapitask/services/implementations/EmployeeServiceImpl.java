@@ -98,10 +98,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void updateEmployee(long id, String json) {
+    public void updateEmployee(long id, String employeeJson) {
         try {
             Employee employee = getEntityIfExist(id);
-            setDataFromJsonToEmployee(employee, employee.getDepartment(), json);
+            setDataFromJsonToEmployee(employee, employee.getDepartment(), employeeJson);
             employeeValidator.validate(employee);
             employeeRepository.save(employee);
         } catch (IOException e) {
@@ -211,7 +211,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void addNewEmployeeToDepartment(long depId, String json) {
+    public void addNewEmployeeToDepartment(long depId, String employeeJson) {
         try {
             Employee employee = new Employee();
             Department department = departmentRepository.findOne(depId);
@@ -220,7 +220,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     Service404Exception.getDepartmentDoesNotExistMessage(depId)
                 );
             }
-            setDataFromJsonToEmployee(employee, department, json);
+            setDataFromJsonToEmployee(employee, department, employeeJson);
             employee.setDepartment(department);
 
             employeeValidator.validate(employee);

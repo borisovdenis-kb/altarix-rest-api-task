@@ -54,8 +54,8 @@ public class EmployeeController {
 
     @ApiOperation(EmployeeDoc.UPDATE_EMPLOYEE_DESC)
     @RequestMapping(path = "/employees/{id}", method = RequestMethod.PUT)
-    public void updateEmployee(@PathVariable long id, @RequestBody String json) {
-        employeeService.updateEmployee(id, json);
+    public void updateEmployee(@PathVariable long id, @RequestBody String employeeJson) {
+        employeeService.updateEmployee(id, employeeJson);
     }
 
     @ApiOperation(EmployeeDoc.GET_EMPLOYEE_CHIEF_DESC)
@@ -66,8 +66,8 @@ public class EmployeeController {
 
     @ApiOperation(EmployeeDoc.ADD_NEW_EMPLOYEE_TO_DEPARTMENT_DESC)
     @RequestMapping(path = "/departments/{depId}/employees", method = RequestMethod.POST)
-    public void addNewEmployeeToDepartment(@PathVariable long depId, @RequestBody String json) {
-        employeeService.addNewEmployeeToDepartment(depId, json);
+    public void addNewEmployeeToDepartment(@PathVariable long depId, @RequestBody String employeeJson) {
+        employeeService.addNewEmployeeToDepartment(depId, employeeJson);
     }
 
     @ApiOperation(EmployeeDoc.DISMISS_EMPLOYEE_FROM_DEPARTMENT_DESC)

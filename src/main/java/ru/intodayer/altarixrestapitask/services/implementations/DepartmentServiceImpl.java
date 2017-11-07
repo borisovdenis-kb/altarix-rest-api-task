@@ -160,9 +160,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     // TODO: may be change approach of creating department
     @Override
-    public Department addDepartment(String json) {
+    public Department addDepartment(String departmentJson) {
         try {
-            Map<String, Object> jsonMap = getMapFromJsonString(json);
+            Map<String, Object> jsonMap = getMapFromJsonString(departmentJson);
             String name = (String) jsonMap.get("name");
 
             if (departmentRepository.findDepartmentByName(name) != null) {
