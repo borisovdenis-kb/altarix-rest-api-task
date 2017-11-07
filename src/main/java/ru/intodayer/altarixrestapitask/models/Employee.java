@@ -78,7 +78,8 @@ public class Employee implements Serializable {
     private LocalDate dismissalDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "position_id", nullable = false)
+    @JoinColumn(name = "position_id")
+    @NotNull(message = "positionId " + ModelValidatorImpl.NOT_NULL_MSG)
     private Position position;
 
     @Column(name = "salary", nullable = false)

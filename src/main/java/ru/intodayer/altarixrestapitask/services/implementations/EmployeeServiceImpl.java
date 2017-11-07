@@ -189,36 +189,25 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setGender(Gender.stringToEnum((String) jsonMap.get("gender")));
         employee.setPhone((String) jsonMap.get("phone"));
         employee.setEmail((String) jsonMap.get("email"));
-        employee.setBirthday(stringToLocalDate((String) jsonMap.get("birthDay")));
 
-        boolean isChief = Boolean.parseBoolean((String) jsonMap.get("isChief"));
+        LocalDate birthDay = ModelValidatorImpl.validateEmployeeBirthDayField(
+            stringToLocalDate((String) jsonMap.get("birthDay"))
+        );
+        employee.setBirthday(birthDay);
+
         Employee chief = departmentRepository.getDepartmentChief(department);
-
-        if (chief != null && isChief && employee.getId() != chief.getId()) {
-            throw new Service403Exception(
-                "Chief of department id=" + department.getId()  + " already exist."
-            );
-        }
+        boolean isChief = ModelValidatorImpl.validateEmployeeIsChiefField(
+            (String) jsonMap.get("isChief"), employee, chief
+        );
         employee.setChief(isChief);
 
-        String salaryStr = (String) jsonMap.get("salary");
-        ModelValidatorImpl.validateDoubleField(salaryStr, "salary");
-        Double salary = Double.parseDouble(salaryStr);
-
-        if (chief != null && !employee.isChief() && salary > chief.getSalary()) {
-            throw new Service400Exception(
-                "Salary of employee can not be greater than salary of his chief."
-            );
-        }
+        Double salary = ModelValidatorImpl.validateEmployeeSalaryField(
+            (String) jsonMap.get("salary"), employee, chief
+        );
         employee.setSalary(salary);
 
-        Long positionId = Long.parseLong((String) jsonMap.get("positionId"));
+        Long positionId = ModelValidatorImpl.validateLongField((String) jsonMap.get("positionId"));
         Position position = positionRepository.findOne(positionId);
-        if (position == null) {
-            throw new Service404Exception(
-                Service404Exception.getPositionDoesNotExistMessage(positionId)
-            );
-        }
         employee.setPosition(position);
     }
 
