@@ -48,6 +48,10 @@ public class Department implements Serializable {
     @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<DepartmentFund> fundHistory;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "department", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<DepartmentLog> departmentLogs;
+
     protected Department() {}
 
     public Department(String name, LocalDate createDate, Department parentDepartment) {

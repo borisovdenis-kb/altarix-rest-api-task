@@ -7,9 +7,9 @@ import java.util.Set;
 
 public interface DepartmentService {
 
-    void addDepartment(String json);
+    Department addDepartment(String json);
 
-    void updateDepartmentName(long id, Department department);
+    Department updateDepartmentName(long id, Department department);
 
     void deleteDepartment(long id);
 
@@ -25,7 +25,5 @@ public interface DepartmentService {
 
     String getDepartmentSalaryFund(long id);
 
-//    Set<Employee> getDepartmentEmployees(long id);
-
-    void changeParentDepartment(long depId, long newDepId);
+    Department changeParentDepartment(long depId, long newDepId);
 }

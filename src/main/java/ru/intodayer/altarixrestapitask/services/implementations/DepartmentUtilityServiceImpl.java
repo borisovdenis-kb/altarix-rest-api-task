@@ -24,7 +24,7 @@ public class DepartmentUtilityServiceImpl implements DepartmentUtilityService {
     @Autowired
     private DepartmentFundRepository departmentFundRepository;
 
-    @Scheduled(fixedRate = MINUTE * 60)
+    @Scheduled(fixedRate = MINUTE * 5)
     @Override
     public void saveDepartmentFundHistory() {
         for (Department department: departmentRepository.findAll()) {
