@@ -19,9 +19,9 @@ public class DepartmentFund implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "create_date", nullable = false, updatable = false)
+    @Column(name = "logging_date", nullable = false, updatable = false)
     @CreatedDate
-    private Date createDate;
+    private Date loggingDate;
 
     @Column(name = "fund")
     private Double departmentFund;
@@ -32,7 +32,7 @@ public class DepartmentFund implements Serializable {
 
     public DepartmentFund() {}
 
-    public DepartmentFund(Date createDate, Double departmentFund, Department department) {
+    public DepartmentFund(Date loggingDate, Double departmentFund, Department department) {
         this.departmentFund = departmentFund;
         this.department = department;
     }
@@ -41,12 +41,12 @@ public class DepartmentFund implements Serializable {
         return id;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public Date getLoggingDate() {
+        return loggingDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setLoggingDate(Date loggingDate) {
+        this.loggingDate = loggingDate;
     }
 
     public Double getDepartmentFund() {
