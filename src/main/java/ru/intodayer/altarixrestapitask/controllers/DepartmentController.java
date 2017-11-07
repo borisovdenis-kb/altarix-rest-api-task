@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.intodayer.altarixrestapitask.dto.DepartmentDto;
+import ru.intodayer.altarixrestapitask.dto.DtoConverter;
 import ru.intodayer.altarixrestapitask.models.Department;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
@@ -21,6 +22,9 @@ public class DepartmentController {
 
     @Autowired
     private DepartmentRepository departmentRepository;
+
+    @Autowired
+    private DtoConverter dtoConverter;
 
     @ApiOperation(DepartmentDoc.ADD_DEPARTMENT_DESC)
     @RequestMapping(path = "/departments", method = RequestMethod.POST)
@@ -53,13 +57,13 @@ public class DepartmentController {
         produces = {"application/json"}
     )
     public DepartmentDto getDepartment(@PathVariable long id) {
-        return convertToDto(departmentService.getDepartment(id));
+        return dtoConverter.convertDepartmentToDto(departmentService.getDepartment(id));
     }
 
     @ApiOperation(DepartmentDoc.GET_DEPARTMENT_BY_NAME_DESC)
     @RequestMapping(path = "/departments", method = RequestMethod.GET)
     public DepartmentDto getDepartmentByName(@RequestParam String name) {
-        return convertToDto(departmentService.getDepartmentByName(name));
+        return dtoConverter.convertDepartmentToDto(departmentService.getDepartmentByName(name));
     }
 
     @ApiOperation(DepartmentDoc.GET_ALL_SUB_DEPARTMENTS_DESC)
@@ -67,7 +71,7 @@ public class DepartmentController {
     public Set<DepartmentDto> getAllSubDepartments(@PathVariable long id) {
         return departmentService.getAllSubDepartments(id)
             .stream()
-            .map(this::convertToDto)
+            .map((d) -> dtoConverter.convertDepartmentToDto(d))
             .collect(Collectors.toSet());
     }
 
@@ -76,7 +80,7 @@ public class DepartmentController {
     public Set<DepartmentDto> getChildDepartments(@PathVariable long id) {
         return departmentService.getChildDepartments(id)
             .stream()
-            .map(this::convertToDto)
+            .map((d) -> dtoConverter.convertDepartmentToDto(d))
             .collect(Collectors.toSet());
     }
 
@@ -85,7 +89,7 @@ public class DepartmentController {
     public Set<DepartmentDto> getParentDepartments(@PathVariable long id) {
         return departmentService.getParentDepartments(id)
             .stream()
-            .map(this::convertToDto)
+            .map((d) -> dtoConverter.convertDepartmentToDto(d))
             .collect(Collectors.toSet());
     }
 
@@ -97,14 +101,5 @@ public class DepartmentController {
     )
     public String getDepartmentSalaryFund(@PathVariable long id) {
         return departmentService.getDepartmentSalaryFund(id);
-    }
-
-    private DepartmentDto convertToDto(Department department) {
-        DepartmentDto departmentDto = new DepartmentDto();
-        departmentDto.setName(department.getName());
-        departmentDto.setCreateDate(department.getCreateDate());
-        departmentDto.setDepartmentChief(departmentRepository.getDepartmentChief(department));
-        departmentDto.setEmployeeAmount(department.getEmployees().size());
-        return departmentDto;
     }
 }

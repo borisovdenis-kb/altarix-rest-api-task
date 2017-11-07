@@ -2,6 +2,7 @@ package ru.intodayer.altarixrestapitask.models;
 
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import ru.intodayer.altarixrestapitask.models.validators.implementations.ModelValidatorImpl;

@@ -1,11 +1,10 @@
 package ru.intodayer.altarixrestapitask.dto;
 
-import org.modelmapper.ModelMapper;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.intodayer.altarixrestapitask.models.Department;
+import org.modelmapper.ModelMapper;
 import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -20,14 +19,19 @@ public class DepartmentDto implements Serializable {
     @Autowired
     private static DepartmentRepository departmentRepository;
 
+    @ApiModelProperty(notes = "The auto generated ID of department entity")
     private long id;
 
+    @ApiModelProperty(notes = "The name of department", required = true)
     private String name;
 
+    @ApiModelProperty(notes = "The auto generated date of creation of department entity")
     private LocalDate createDate;
 
+    @ApiModelProperty(notes = "The chief of the department")
     private Employee departmentChief;
 
+    @ApiModelProperty(notes = "Amount of employees working in department")
     private int employeeAmount;
 
     public String getName() {
