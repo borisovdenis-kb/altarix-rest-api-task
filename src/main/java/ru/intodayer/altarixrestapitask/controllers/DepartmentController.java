@@ -3,10 +3,13 @@ package ru.intodayer.altarixrestapitask.controllers;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.intodayer.altarixrestapitask.dto.DepartmentDto;
 import ru.intodayer.altarixrestapitask.models.Department;
+import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
 import ru.intodayer.altarixrestapitask.swagger.DepartmentDoc;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -15,6 +18,9 @@ public class DepartmentController {
 
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
 
     @ApiOperation(DepartmentDoc.ADD_DEPARTMENT_DESC)
     @RequestMapping(path = "/departments", method = RequestMethod.POST)
@@ -46,32 +52,41 @@ public class DepartmentController {
         method = RequestMethod.GET,
         produces = {"application/json"}
     )
-    public String getDepartment(@PathVariable long id) {
-        return departmentService.getDepartment(id);
+    public DepartmentDto getDepartment(@PathVariable long id) {
+        return convertToDto(departmentService.getDepartment(id));
     }
 
     @ApiOperation(DepartmentDoc.GET_DEPARTMENT_BY_NAME_DESC)
     @RequestMapping(path = "/departments", method = RequestMethod.GET)
-    public Department getDepartmentByName(@RequestParam String name) {
-        return departmentService.getDepartmentByName(name);
+    public DepartmentDto getDepartmentByName(@RequestParam String name) {
+        return convertToDto(departmentService.getDepartmentByName(name));
     }
 
     @ApiOperation(DepartmentDoc.GET_ALL_SUB_DEPARTMENTS_DESC)
     @RequestMapping(path = "/departments/{id}/subdepartments", method = RequestMethod.GET)
-    public Set<Department> getAllSubDepartments(@PathVariable long id) {
-        return departmentService.getAllSubDepartments(id);
+    public Set<DepartmentDto> getAllSubDepartments(@PathVariable long id) {
+        return departmentService.getAllSubDepartments(id)
+            .stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toSet());
     }
 
     @ApiOperation(DepartmentDoc.GET_CHILD_DEPARTMENT_DESC)
     @RequestMapping(path = "/departments/{id}/childdepartments", method = RequestMethod.GET)
-    public Set<Department> getChildDepartments(@PathVariable long id) {
-        return departmentService.getChildDepartments(id);
+    public Set<DepartmentDto> getChildDepartments(@PathVariable long id) {
+        return departmentService.getChildDepartments(id)
+            .stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toSet());
     }
 
     @ApiOperation(DepartmentDoc.GET_PARENT_DEPARTMENTS_DESC)
     @RequestMapping(path = "/departments/{id}/parentDepartments", method = RequestMethod.GET)
-    public Set<Department> getParentDepartments(@PathVariable long id) {
-        return departmentService.getParentDepartments(id);
+    public Set<DepartmentDto> getParentDepartments(@PathVariable long id) {
+        return departmentService.getParentDepartments(id)
+            .stream()
+            .map(this::convertToDto)
+            .collect(Collectors.toSet());
     }
 
     @ApiOperation(DepartmentDoc.GET_DEPARTMENT_SALARY_FUND_DESC)
@@ -82,5 +97,14 @@ public class DepartmentController {
     )
     public String getDepartmentSalaryFund(@PathVariable long id) {
         return departmentService.getDepartmentSalaryFund(id);
+    }
+
+    private DepartmentDto convertToDto(Department department) {
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setName(department.getName());
+        departmentDto.setCreateDate(department.getCreateDate());
+        departmentDto.setDepartmentChief(departmentRepository.getDepartmentChief(department));
+        departmentDto.setEmployeeAmount(department.getEmployees().size());
+        return departmentDto;
     }
 }

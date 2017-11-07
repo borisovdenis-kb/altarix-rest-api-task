@@ -3,7 +3,9 @@
 
 Documentation available at http://localhost:8080/swagger-ui.html
 
-Test department structure:
+SQL scripts for creating tables and test data are in **/src/main/resources/sql**
+
+Test departments structure:
 
 `Altarix`
 - `Backend Developing`

@@ -1,7 +1,7 @@
 package ru.intodayer.altarixrestapitask.services.exceptions;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 
 
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
@@ -14,7 +14,7 @@ public class Service400Exception extends RuntimeException {
         super(message);
     }
 
-    public static String getDublicateDepartmentNameMessage(String name) {
-        return "Department with name " + name + " already exist.";
+    public static String getDuplicateDepartmentNameMessage(String name) {
+        return "Department with name [" + name + "] already exist.";
     }
 }

@@ -1,7 +1,7 @@
 package ru.intodayer.altarixrestapitask.services.exceptions;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 
 
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
@@ -29,8 +29,8 @@ public class Service404Exception extends RuntimeException {
         return String.format(departmentDoesNotExist, id);
     }
 
-    public static String getEmpWoringInDepDoesNotExistMessage(long empId, long depId) {
-        String empWoringInDepDoesNotExist = "Employee id=%s working in department id=%s does not exist.";
-        return String.format(empWoringInDepDoesNotExist, empId, depId);
+    public static String getEmpWorkingInDepDoesNotExistMessage(long empId, long depId) {
+        String empWorkingInDepDoesNotExist = "Employee id=%s working in department id=%s does not exist.";
+        return String.format(empWorkingInDepDoesNotExist, empId, depId);
     }
 }

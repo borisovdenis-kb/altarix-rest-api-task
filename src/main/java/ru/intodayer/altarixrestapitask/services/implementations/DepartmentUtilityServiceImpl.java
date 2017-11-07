@@ -12,7 +12,7 @@ import ru.intodayer.altarixrestapitask.services.DepartmentUtilityService;
 
 
 @Service
-@EnableScheduling
+//@EnableScheduling
 public class DepartmentUtilityServiceImpl implements DepartmentUtilityService {
 
     private static final int SECOND = 1000;

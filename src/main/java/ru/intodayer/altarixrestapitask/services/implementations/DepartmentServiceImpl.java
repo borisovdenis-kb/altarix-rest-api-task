@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.intodayer.altarixrestapitask.models.Department;
-import ru.intodayer.altarixrestapitask.models.Employee;
 import ru.intodayer.altarixrestapitask.repositories.DepartmentRepository;
 import ru.intodayer.altarixrestapitask.services.DepartmentService;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service400Exception;
@@ -46,7 +45,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         if (departmentWithName != null) {
             if(departmentWithName.getId() != targetDepartment.getId()) {
                 throw new Service400Exception(
-                    Service400Exception.getDublicateDepartmentNameMessage(departmentWithName.getName())
+                    Service400Exception.getDuplicateDepartmentNameMessage(departmentWithName.getName())
                 );
             }
         }
@@ -103,25 +102,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public String getDepartment(long id) {
-        Department department = getEntityIfExist(id);
-        ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> jsonConstructor = new HashMap<>();
-        Map<String, Object> departmentMap = new HashMap<>();
-
-        departmentMap.put("name", department.getName());
-        departmentMap.put("createDate", department.getCreateDate());
-        jsonConstructor.put("department", departmentMap);
-        jsonConstructor.put("departmentChief", departmentRepository.getDepartmentChief(department));
-        jsonConstructor.put("employeesAmount", department.getEmployees().size());
-
-        try {
-            return mapper.writeValueAsString(jsonConstructor);
-        } catch (JsonProcessingException e) {
-            throw new Service500Exception(
-                "Error while converting map -> json.", e
-            );
-        }
+    public Department getDepartment(long id) {
+        return getEntityIfExist(id);
     }
 
     @Override
@@ -129,7 +111,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findDepartmentByName(name);
         if (department == null) {
             throw new Service404Exception(
-                "Department with name " + name + " does not exist."
+                "Department with name [" + name + "] does not exist."
             );
         }
         return department;
@@ -185,7 +167,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
             if (departmentRepository.findDepartmentByName(name) != null) {
                 throw new Service400Exception(
-                        Service400Exception.getDublicateDepartmentNameMessage(name)
+                        Service400Exception.getDuplicateDepartmentNameMessage(name)
                 );
             }
 

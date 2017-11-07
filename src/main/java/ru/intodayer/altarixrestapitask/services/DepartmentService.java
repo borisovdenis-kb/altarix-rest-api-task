@@ -17,7 +17,7 @@ public interface DepartmentService {
 
     Set<Department> getChildDepartments(long id);
 
-    String getDepartment(long id);
+    Department getDepartment(long id);
 
     Department getDepartmentByName(String name);
 

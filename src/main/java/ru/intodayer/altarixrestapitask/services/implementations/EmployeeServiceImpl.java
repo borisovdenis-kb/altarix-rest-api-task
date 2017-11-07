@@ -15,7 +15,6 @@ import ru.intodayer.altarixrestapitask.repositories.EmployeeRepository;
 import ru.intodayer.altarixrestapitask.repositories.PositionRepository;
 import ru.intodayer.altarixrestapitask.services.EmployeeService;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service400Exception;
-import ru.intodayer.altarixrestapitask.services.exceptions.Service403Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service404Exception;
 import ru.intodayer.altarixrestapitask.services.exceptions.Service500Exception;
 import java.io.IOException;
@@ -81,12 +80,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee chief = departmentRepository.getDepartmentChief(employee.getDepartment());
         if (chief == null) {
             throw new Service404Exception(
-                "Chief of employee with id " + id + " does't exist."
+                "Chief of employee with id=" + id + " does't exist."
             );
         }
         if (chief.getId() == id) {
             throw new Service400Exception(
-                "Employee with id " + id + " is chief."
+                "Employee with id=" + id + " is chief."
             );
         }
         return chief;
@@ -118,7 +117,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if (employee == null) {
             throw new Service404Exception(
-                "Dismissable " + Service404Exception.getEmpWoringInDepDoesNotExistMessage(empId, depId)
+                "Dismissable " + Service404Exception.getEmpWorkingInDepDoesNotExistMessage(empId, depId)
             );
         }
         employee.setDepartment(null);
@@ -158,7 +157,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         if (employee == null) {
             throw new Service404Exception(
-                Service404Exception.getEmpWoringInDepDoesNotExistMessage(empId, depId)
+                Service404Exception.getEmpWorkingInDepDoesNotExistMessage(empId, depId)
             );
         }
 

@@ -1,7 +1,7 @@
 package ru.intodayer.altarixrestapitask.services.exceptions;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
 
 
 @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
