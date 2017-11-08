@@ -144,6 +144,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         for (Employee e: department.getEmployees()) {
+            e.setChief(false);
             e.setDepartment(newDepartment);
         }
         departmentValidator.validate(department);
@@ -166,6 +167,8 @@ public class EmployeeServiceImpl implements EmployeeService {
                 Service404Exception.getDepartmentDoesNotExistMessage(newDepId)
             );
         }
+        employee.setChief(false);
+        employee.setDepartment(newDepartment);
         employee.setDepartment(newDepartment);
         employeeValidator.validate(employee);
         employeeRepository.save(employee);

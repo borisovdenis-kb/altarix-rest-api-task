@@ -2,6 +2,7 @@ package ru.intodayer.altarixrestapitask.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.intodayer.altarixrestapitask.dto.DtoConverter;
 import ru.intodayer.altarixrestapitask.dto.EmployeeDto;
@@ -65,6 +66,7 @@ public class EmployeeController {
     }
 
     @ApiOperation(EmployeeDoc.ADD_NEW_EMPLOYEE_TO_DEPARTMENT_DESC)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(path = "/departments/{depId}/employees", method = RequestMethod.POST)
     public void addNewEmployeeToDepartment(@PathVariable long depId, @RequestBody String employeeJson) {
         employeeService.addNewEmployeeToDepartment(depId, employeeJson);

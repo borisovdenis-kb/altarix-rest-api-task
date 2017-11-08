@@ -19,6 +19,7 @@ public class DtoConverterImpl implements DtoConverter {
     @Override
     public EmployeeDto convertEmployeeToDto(Employee employee) {
         EmployeeDto employeeDto = new EmployeeDto();
+        employeeDto.setId(employee.getId());
         employeeDto.setLastName(employee.getLastName());
         employeeDto.setFirstName(employee.getFirstName());
         employeeDto.setMiddleName(employee.getMiddleName());

@@ -2,6 +2,7 @@ package ru.intodayer.altarixrestapitask.controllers;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.intodayer.altarixrestapitask.dto.DepartmentDto;
 import ru.intodayer.altarixrestapitask.dto.DtoConverter;
@@ -23,6 +24,7 @@ public class DepartmentController {
     private DtoConverter dtoConverter;
 
     @ApiOperation(DepartmentDoc.ADD_DEPARTMENT_DESC)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @RequestMapping(path = "/departments", method = RequestMethod.POST)
     public void addDepartment(@RequestBody String departmentJson) {
         departmentService.addDepartment(departmentJson);

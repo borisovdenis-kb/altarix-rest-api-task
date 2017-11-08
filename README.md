@@ -1,9 +1,13 @@
 # Altarix REST API Task
 #### Author: Borisov Denis
 
+Execute command to run application: `gradle bootRun`
+
 Documentation available at http://localhost:8080/swagger-ui.html
 
-SQL scripts for creating tables and test data are in **/src/main/resources/sql**
+Postman collection with http requests are in **/src/main/resources/postman**
+
+SQL scripts for creating tables and creating test data are in **/src/main/resources/sql**
 
 Test departments structure:
 

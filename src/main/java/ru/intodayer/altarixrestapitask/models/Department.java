@@ -49,7 +49,7 @@ public class Department implements Serializable {
     private Set<DepartmentFund> fundHistory;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "department", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<DepartmentLog> departmentLogs;
 
     protected Department() {}
